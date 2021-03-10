@@ -28,7 +28,6 @@ Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"
 Word_List = ["Apple", "Ball"]
 
 
-
 class GameObject: #class for defining game objects that will be drawn onto the game screen and moved arround
     def __init__(self, image_path, X_pos, Y_pos, Width, Height):
         Object_Image = pygame.image.load(image_path) #Loads image to be set
@@ -56,14 +55,24 @@ class Game:
 
     def run_game_loop (self):
         Game_Over = False
+        GameMenu = False
+        OnePlayerGame = False #sets game into a state where you play against the CPU
+        TwoPlayerGame = False #sets game into a two player state where you play against another player 
 
         while Game_Over == False:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     Game_Over = True
                 keys = pygame.key.get_pressed()  
-                if keys[pygame.K_UP] == True:
-                    Game_Over = True  
+                if keys[pygame.K_ESCAPE] == True:
+                    Game_Over = True 
+               
+                
+
+                if keys[pygame.K_a] == True: #Checks for A Key - to be repeated for entire keyboard
+                    if "A" in Alphabet:
+                        continue
+                
                 
                 self.Game_Screen.fill(Grey_Colour)
 
