@@ -26,6 +26,7 @@ LightGrey_Colour = (200,200,200)
 Clock = pygame.time.Clock()
 Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 Word_List = ["Apple", "Ball"]
+GuessList = []
 
 
 class GameObject: #class for defining game objects that will be drawn onto the game screen and moved arround
@@ -67,7 +68,7 @@ class Game:
                 if keys[pygame.K_ESCAPE] == True:
                     Game_Over = True 
                
-                
+                print(keys)
 
                 if keys[pygame.K_a] == True: #Checks for A Key - to be repeated for entire keyboard
                     if "A" in Alphabet:
