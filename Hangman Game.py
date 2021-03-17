@@ -64,6 +64,35 @@ class Game:
         letterGuessed = ""
         turn = ""
 
+        letterA = GameObject("assets/A.png", 100,100,26,21)
+        letterB = GameObject("assets/B.png", 100,100,20,21)
+        letterC = GameObject("assets/C.png", 100,100,22,21)
+        letterD = GameObject("assets/D.png", 100,100,26,21)
+        letterE = GameObject("assets/E.png", 100,100,17,21)
+        letterF = GameObject("assets/F.png", 100,100,17,21)
+        letterG = GameObject("assets/G.png", 100,100,24,22)
+        letterH = GameObject("assets/H.png", 100,100,28,21)
+        letterI = GameObject("assets/I.png", 100,100,13,21)
+        letterJ = GameObject("assets/J.png", 100,100,16,21)
+        letterK = GameObject("assets/K.png", 100,100,25,21)
+        letterL = GameObject("assets/L.png", 100,100,19,21)
+        letterM = GameObject("assets/M.png", 100,100,33,21)
+        letterN = GameObject("assets/N.png", 100,100,28,21)
+        letterO = GameObject("assets/O.png", 100,100,25,21)
+        letterP = GameObject("assets/P.png", 100,100,19,21)
+        letterQ = GameObject("assets/Q.png", 100,100,27,21)
+        letterR = GameObject("assets/R.png", 100,100,24,21)
+        letterS = GameObject("assets/S.png", 100,100,14,21)
+        letterT = GameObject("assets/T.png", 100,100,22,22)
+        letterU = GameObject("assets/U.png", 100,100,25,21)
+        letterV = GameObject("assets/V.png", 100,100,25,21)
+        letterW = GameObject("assets/W.png", 100,100,34,21)
+        letterX = GameObject("assets/X.png", 100,100,28,21)
+        letterY = GameObject("assets/Y.png", 100,100,25,21)
+        letterZ = GameObject("assets/Z.png", 100,100,20,22)
+        
+
+
         while Game_Over == False:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -180,8 +209,12 @@ class Game:
                         turn = "Over"
 
             #ToDo - possibly add option for AI difficulty to increase     
-            if GameMenu == True
-            self.Game_Screen.fill(Grey_Colour)
+            if GameMenu == True:
+                self.Game_Screen.fill(LightGrey_Colour)
+                letterA.Draw(self.Game_Screen) #added to test letter size and postioning - To be Removed! 
+
+                letterS.X_pos = 250 #added to test letter size and postioning - To be Removed! 
+                letterS.Draw(self.Game_Screen) #added to test letter size and postioning - To be Removed! 
 
             elif GameMenu == False and OnePlayerGame == True:
                 pass
