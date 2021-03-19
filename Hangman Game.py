@@ -63,6 +63,10 @@ class Game:
         ChooseWords = False
         letterGuessed = ""
         turn = ""
+ 
+        title = GameObject("assets/Menu/Title.png", 350,100,896,110) 
+        onePlayer = GameObject("assets/Menu/singlePlayer.png", 650,600,233,34)
+        twoPlayer = GameObject("assets/Menu/2Player.png", 650,675,241,34)
 
         letterA = GameObject("assets/A.png", 100,100,26,21)
         letterB = GameObject("assets/B.png", 100,100,20,21)
@@ -97,11 +101,10 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     Game_Over = True
-                keys = pygame.key.get_pressed()  
+                keys = pygame.key.get_pressed()
+
                 if keys[pygame.K_ESCAPE] == True:
                     Game_Over = True 
-               
-                print(keys)
 
                 if keys[pygame.K_a] == True: #Checks for A Key - to be repeated for entire keyboard
                     if "A" not in GuessList:
@@ -211,10 +214,14 @@ class Game:
             #ToDo - possibly add option for AI difficulty to increase     
             if GameMenu == True:
                 self.Game_Screen.fill(LightGrey_Colour)
-                letterA.Draw(self.Game_Screen) #added to test letter size and postioning - To be Removed! 
+                title.Draw(self.Game_Screen)
+                onePlayer.Draw(self.Game_Screen)
+                twoPlayer.Draw(self.Game_Screen)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos
+                    print(pos)
 
-                letterS.X_pos = 250 #added to test letter size and postioning - To be Removed! 
-                letterS.Draw(self.Game_Screen) #added to test letter size and postioning - To be Removed! 
+            
 
             elif GameMenu == False and OnePlayerGame == True:
                 pass
