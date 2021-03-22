@@ -305,7 +305,10 @@ class Game:
                 elif Letter.capitalize() == "Z":
                     Z.X_pos = newX_pos
                     Z.Y_pos = newY_pos
-           
+
+            def KeyboardDisplay():
+                pass #add function to display on screen keyboard 
+
             #ToDo - possibly add option for AI difficulty to increase     
             if GameMenu == True and OnePlayerGame == False and TwoPlayerGame == False:
                 self.Game_Screen.fill(LightGrey_Colour)
@@ -359,23 +362,23 @@ class Game:
 
                     
 #TODO - Turn into a function for displaying words on screen                 
-                    Word = Word_List[numSelect]  #TODO - Capatilze word before going into guessing loop!
+                    Word = Word_List[numSelect]
+                     #TODO - Capatilze word before going into guessing loop!
                     X_posList = []
                     Counter = 0
+                
                     
                     if KeyLetter not in GuessList:
                         GuessList.append(KeyLetter)
-                        print(GuessList)
-                        print(KeyLetter)
+                        
 
                     for Letter in Word:
                         Letter = Letter
-                        print(Letter.capitalize)
                         Y_pos = 500 #Yposition of where the word will be displayed
                         if Counter >= 1:
                             X_posList.append(X_posList[Counter - 1] + 33)
                             changeLetterPos(Letter, X_posList[Counter], Y_pos )
-                            if Letter in GuessList:
+                            if Letter.capitalize() in GuessList:
                                 displayLetter(Letter)
                             pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
                             Counter = Counter + 1
@@ -385,7 +388,7 @@ class Game:
                         elif Counter == 0:
                             X_posList.append(600) # set starting postion of first letter 
                             changeLetterPos(Letter ,X_posList[Counter], Y_pos)
-                            if Letter in GuessList:
+                            if Letter.capitalize() in GuessList:
                                 displayLetter(Letter)
                             pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
                             Counter = Counter + 1
