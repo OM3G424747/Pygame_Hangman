@@ -25,7 +25,14 @@ Grey_Colour = (100,100,100)
 LightGrey_Colour = (200,200,200)
 Clock = pygame.time.Clock()
 Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-Word_List = ["APPLE", "Ball"]
+Word_List = ["Apple", "Ball" ]
+OpenFile = "assets/wordList.txt"
+OpenFile = open(OpenFile)
+for line in OpenFile:
+    line = line.rstrip("\n")
+    Word_List.append(line)
+
+print(Word_List)
 GuessList = []
 
 
@@ -40,6 +47,55 @@ class GameObject: #class for defining game objects that will be drawn onto the g
     
     def Draw (self,background): #This function is used to draw the object on the game screen
         background.blit(self.Image,(self.X_pos,self.Y_pos)) #Blit funtion is used to draw imaghes to the game screen/ surface selected along with the X and Y Pos taken in the form of a tuple 
+
+class keyselection:
+#TODO - unclude section in function to take mouse X & Y pos, and "Click" bool to confirm if a button is clicked - corrolate with list for input to guess the letter 
+    def __init__(self, keyBoardLetters, keyGuessed, Game_Screen, StartX_pos):
+        self.Game_Screen = Game_Screen
+        self.StartX_pos = StartX_pos
+        self.guessedLetters = keyGuessed
+        self.buttonX_posList = []
+        self.buttonY_posList = []
+        self.buttonWidth = 55 #sets width of keyboard buttons 
+        self.buttonHeight = 55 #set height of keyboard buttons 
+        self.buttonSpacing = self.buttonWidth + 17 #number added determines the spacing between buttons 
+        self.numberOfButtonsinRow = 7 
+        self.rowButtonCounter = 0
+        self.topRowY_pos = 100
+        self.buttonCount = 0
+        self.keyBoardLetters = keyBoardLetters
+    
+        for Letter in self.keyBoardLetters:  
+            if self.buttonCount == 0: #used to check if starting point
+                self.buttonX_posList.append(self.StartX_pos)
+                self.buttonY_posList.append(self.topRowY_pos)
+                if Letter.capitalize() not in self.guessedLetters:
+                    pygame.draw.rect(Game_Screen, (250,250,250), [self.buttonX_posList[self.buttonCount],self.topRowY_pos,self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
+                    self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (self.buttonWidth -20, self.buttonHeight - 20)),(self.buttonX_posList[self.buttonCount] + 10,self.topRowY_pos + 10)) 
+                self.buttonCount = self.buttonCount + 1
+                self.rowButtonCounter = self.rowButtonCounter + 1
+            
+            elif self.buttonCount > 0 and self.buttonCount < len(self.keyBoardLetters): #used to check continuation on starting point 
+                if self.rowButtonCounter == 0:  #used to check if it's the start of a new row or not. 0 = start of new row
+                    self.buttonX_posList.append(self.StartX_pos )
+                elif self.rowButtonCounter > 0: #used to see if it's the second button in a row being displayed or not
+                    self.buttonX_posList.append(self.buttonX_posList[self.buttonCount - 1] + self.buttonSpacing )
+                self.buttonY_posList.append(self.topRowY_pos)
+                if Letter.capitalize() not in self.guessedLetters:
+                    pygame.draw.rect(Game_Screen, (250,250,250), [self.buttonX_posList[self.buttonCount],self.buttonY_posList[self.buttonCount],self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
+                    self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (self.buttonWidth -20, self.buttonHeight - 20)),(self.buttonX_posList[self.buttonCount] + 10,self.buttonY_posList[self.buttonCount] + 10)) 
+
+                self.buttonCount = self.buttonCount + 1
+                self.rowButtonCounter = self.rowButtonCounter + 1
+                if self.rowButtonCounter == self.numberOfButtonsinRow:
+                    self.topRowY_pos = self.topRowY_pos + self.buttonSpacing
+                    self.rowButtonCounter = 0
+
+            
+            elif self.buttonCount == len(self.keyBoardLetters):
+                self.buttonCount = 0
+
+            
 
 
 class Game:
@@ -315,7 +371,7 @@ class Game:
                 title.Draw(self.Game_Screen)
                 onePlayer.Draw(self.Game_Screen)
                 twoPlayer.Draw(self.Game_Screen)
-                numSelect = random.randint(0,1)
+                numSelect = random.randint(0,len(Word_List)) #selects a random int to correlate with a word in the word list 
                 if event.type == pygame.MOUSEBUTTONDOWN and mousePos[0] >= onePlayer.X_pos and mousePos[1] >= onePlayer.Y_pos and mousePos[0] <= onePlayer.X_pos + 233 and mousePos[1] <=  onePlayer.Y_pos + 34:
                     print(mousePos)
                     print("You clicked on One Player Mode")
@@ -371,7 +427,7 @@ class Game:
                     if KeyLetter not in GuessList:
                         GuessList.append(KeyLetter)
                         
-
+                    keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 1000)
                     for Letter in Word:
                         Letter = Letter
                         Y_pos = 500 #Yposition of where the word will be displayed
