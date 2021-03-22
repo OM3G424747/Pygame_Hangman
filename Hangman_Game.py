@@ -25,7 +25,7 @@ Grey_Colour = (100,100,100)
 LightGrey_Colour = (200,200,200)
 Clock = pygame.time.Clock()
 Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-Word_List = ["Apple", "Ball"]
+Word_List = ["APPLE", "Ball"]
 GuessList = []
 
 
@@ -63,6 +63,7 @@ class Game:
         TwoPlayerGame = False #sets game into a two player state where you play against another player 
         ChooseWord = False
         RandomWord = False
+        KeyLetter = ""
         letterGuessed = ""
         turn = ""
         onScreenKeyBoard = "qwertyuiopasdfghjklzxcvbnm"
@@ -73,6 +74,7 @@ class Game:
         twoPlayer = GameObject("assets/Menu/2Player.png", 650,675,241,34)
         selectWord = GameObject("assets/Menu/selectWord.png", 565,600,367,36)
         randomWord = GameObject("assets/Menu/randomWord.png", 565,675,442,36)
+        
 
         A = GameObject("assets/A.png", 100,100,26,21)
         B = GameObject("assets/B.png", 100,100,20,21)
@@ -115,110 +117,60 @@ class Game:
                 if keys[pygame.K_ESCAPE] == True:
                     Game_Over = True 
 
+
+#TODO - update include an update on the KeyLetter variable to the keyboard letter
                 if keys[pygame.K_a] == True: #Checks for A Key - to be repeated for entire keyboard
-                    if "A" not in GuessList:
-                        GuessList.append("A")
-                        turn = "Over"
+                    KeyLetter = "A"
                 elif keys[pygame.K_b] == True: #Checks for B Key - to be repeated for entire keyboard
-                    if "B" not in GuessList:
-                        GuessList.append("B")
-                        turn = "Over"
+                    KeyLetter = "B"
                 elif keys[pygame.K_c] == True: #Checks for C Key - to be repeated for entire keyboard
-                    if "C" not in GuessList:
-                        GuessList.append("C")
-                        turn = "Over"
+                    KeyLetter = "C"
                 elif keys[pygame.K_d] == True: #Checks for D Key - to be repeated for entire keyboard
-                    if "D" not in GuessList:
-                        GuessList.append("D")
-                        turn = "Over"
+                    KeyLetter = "D"
                 elif keys[pygame.K_e] == True: #Checks for E Key - to be repeated for entire keyboard
-                    if "E" not in GuessList:
-                        GuessList.append("E")
-                        turn = "Over"
+                    KeyLetter = "E"
                 elif keys[pygame.K_f] == True: #Checks for F Key - to be repeated for entire keyboard
-                    if "F" not in GuessList:
-                        GuessList.append("F")
-                        turn = "Over"
+                    KeyLetter = "F"
                 elif keys[pygame.K_g] == True: #Checks for G Key - to be repeated for entire keyboard
-                    if "G" not in GuessList:
-                        GuessList.append("G")
-                        turn = "Over"
+                    KeyLetter = "G"
                 elif keys[pygame.K_h] == True: #Checks for H Key - to be repeated for entire keyboard
-                    if "H" not in GuessList:
-                        GuessList.append("H")
-                        turn = "Over"
+                    KeyLetter = "H"
                 elif keys[pygame.K_i] == True: #Checks for I Key - to be repeated for entire keyboard
-                    if "I" not in GuessList:
-                        GuessList.append("I")
-                        turn = "Over"
+                    KeyLetter = "I"
                 elif keys[pygame.K_j] == True: #Checks for J Key - to be repeated for entire keyboard
-                    if "J" not in GuessList:
-                        GuessList.append("J")
-                        turn = "Over"
+                    KeyLetter = "J"
                 elif keys[pygame.K_k] == True: #Checks for K Key - to be repeated for entire keyboard
-                    if "K" not in GuessList:
-                        GuessList.append("K")
-                        turn = "Over"
+                    KeyLetter = "K"
                 elif keys[pygame.K_l] == True: #Checks for L Key - to be repeated for entire keyboard
-                    if "L" not in GuessList:
-                        GuessList.append("L")
-                        turn = "Over"
+                    KeyLetter = "L"
                 elif keys[pygame.K_m] == True: #Checks for M Key - to be repeated for entire keyboard
-                    if "M" not in GuessList:
-                        GuessList.append("M")
-                        turn = "Over"
+                    KeyLetter = "M"
                 elif keys[pygame.K_n] == True: #Checks for N Key - to be repeated for entire keyboard
-                    if "N" not in GuessList:
-                        GuessList.append("N")
-                        turn = "Over"
+                    KeyLetter = "N"
                 elif keys[pygame.K_o] == True: #Checks for O Key - to be repeated for entire keyboard
-                    if "O" not in GuessList:
-                        GuessList.append("O")
-                        turn = "Over"
+                    KeyLetter = "O"
                 elif keys[pygame.K_p] == True: #Checks for P Key - to be repeated for entire keyboard
-                    if "P" not in GuessList:
-                        GuessList.append("P")
-                        turn = "Over"
+                    KeyLetter = "P"
                 elif keys[pygame.K_q] == True: #Checks for Q Key - to be repeated for entire keyboard
-                    if "Q" not in GuessList:
-                        GuessList.append("Q")
-                        turn = "Over"
+                    KeyLetter = "Q"
                 elif keys[pygame.K_r] == True: #Checks for R Key - to be repeated for entire keyboard
-                    if "R" not in GuessList:
-                        GuessList.append("R")
-                        turn = "Over"
+                    KeyLetter = "R"
                 elif keys[pygame.K_s] == True: #Checks for S Key - to be repeated for entire keyboard
-                    if "S" not in GuessList:
-                        GuessList.append("S")
-                        turn = "Over"
+                    KeyLetter = "S"
                 elif keys[pygame.K_t] == True: #Checks for T Key - to be repeated for entire keyboard
-                    if "T" not in GuessList:
-                        GuessList.append("T")
-                        turn = "Over"
+                    KeyLetter = "T"
                 elif keys[pygame.K_u] == True: #Checks for U Key - to be repeated for entire keyboard
-                    if "U" not in GuessList:
-                        GuessList.append("U")
-                        turn = "Over"
+                    KeyLetter = "U"
                 elif keys[pygame.K_v] == True: #Checks for V Key - to be repeated for entire keyboard
-                    if "V" not in GuessList:
-                        GuessList.append("V")
-                        turn = "Over"
+                    KeyLetter = "V"
                 elif keys[pygame.K_w] == True: #Checks for W Key - to be repeated for entire keyboard
-                    if "W" not in GuessList:
-                        GuessList.append("W")
-                        turn = "Over"
+                    KeyLetter = "W"
                 elif keys[pygame.K_x] == True: #Checks for X Key - to be repeated for entire keyboard
-                    if "X" not in GuessList:
-                        GuessList.append("X")
-                        turn = "Over"
+                    KeyLetter = "X"
                 elif keys[pygame.K_y] == True: #Checks for Y Key - to be repeated for entire keyboard
-                    if "Y" not in GuessList:
-                        GuessList.append("Y")
-                        turn = "Over"
+                    KeyLetter = "Y"
                 elif keys[pygame.K_z] == True: #Checks for Z Key - to be repeated for entire keyboard
-                    if "Z" not in GuessList:
-                        GuessList.append("Z")
-                        turn = "Over"
+                    KeyLetter = "Z"
 
             def displayLetter( Letter ):
                 if Letter.capitalize() == "A":
@@ -407,28 +359,38 @@ class Game:
 
                     
 #TODO - Turn into a function for displaying words on screen                 
-                    Word = Word_List[numSelect] 
+                    Word = Word_List[numSelect]  #TODO - Capatilze word before going into guessing loop!
                     X_posList = []
-                    print(Word)
                     Counter = 0
+                    
+                    if KeyLetter not in GuessList:
+                        GuessList.append(KeyLetter)
+                        print(GuessList)
+                        print(KeyLetter)
+
                     for Letter in Word:
+                        Letter = Letter
+                        print(Letter.capitalize)
                         Y_pos = 500 #Yposition of where the word will be displayed
                         if Counter >= 1:
                             X_posList.append(X_posList[Counter - 1] + 33)
                             changeLetterPos(Letter, X_posList[Counter], Y_pos )
-                            displayLetter(Letter)
+                            if Letter in GuessList:
+                                displayLetter(Letter)
+                            pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
                             Counter = Counter + 1
                             if Counter == len(Word):
-                                print (Counter)
-                                print(X_posList)
                                 Counter = 0
                                 
                         elif Counter == 0:
                             X_posList.append(600) # set starting postion of first letter 
                             changeLetterPos(Letter ,X_posList[Counter], Y_pos)
-                            displayLetter(Letter)
+                            if Letter in GuessList:
+                                displayLetter(Letter)
+                            pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
                             Counter = Counter + 1
 
+                        
                 
                        
 
