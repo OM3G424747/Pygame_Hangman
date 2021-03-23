@@ -60,18 +60,21 @@ class keyselection:
         self.buttonWidth = 55 #sets width of keyboard buttons 
         self.buttonHeight = 55 #set height of keyboard buttons 
         self.buttonSpacing = self.buttonWidth + 17 #number added determines the spacing between buttons 
+        self.letterSpacing = 10
         self.numberOfButtonsinRow = 7 
         self.rowButtonCounter = 0
         self.topRowY_pos = 100
         self.buttonCount = 0
         self.keyBoardLetters = keyBoardLetters
+        letterX_pos = 0
     
-        for Letter in self.keyBoardLetters:  
+        for Letter in self.keyBoardLetters:
             if self.buttonCount == 0: #used to check if starting point
                 self.buttonX_posList.append(self.StartX_pos)
                 self.buttonY_posList.append(self.topRowY_pos)
                 if Letter.capitalize() not in self.guessedLetters:
                     pygame.draw.rect(Game_Screen, (250,250,250), [self.buttonX_posList[self.buttonCount],self.topRowY_pos,self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
+                    
                     self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2), int(21*1.2))),(self.buttonX_posList[self.buttonCount] + 10,self.topRowY_pos + 10)) 
                 self.buttonCount = self.buttonCount + 1
                 self.rowButtonCounter = self.rowButtonCounter + 1
@@ -86,9 +89,34 @@ class keyselection:
                     pygame.draw.rect(Game_Screen, (250,250,250), [self.buttonX_posList[self.buttonCount],self.buttonY_posList[self.buttonCount],self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
                     #TODO - Update to center all letters based on their width!
                     if textWidth[Letter.capitalize()] <= 13: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + 20 #adds spacing to the buttons X_pos to center it in the button 
-                    elif textWidth[Letter.capitalize()] >= 13:
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + 10
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 8  #adds spacing to the buttons X_pos to center it in the button 
+                    elif textWidth[Letter.capitalize()] <= 14: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 9 
+                    elif textWidth[Letter.capitalize()] <= 16: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 7
+                    elif textWidth[Letter.capitalize()] <= 17: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 6
+                    elif textWidth[Letter.capitalize()] <= 19: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 5
+                    elif textWidth[Letter.capitalize()] <= 20: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 3
+                    elif textWidth[Letter.capitalize()] <= 22: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 4
+                    elif textWidth[Letter.capitalize()] <= 24: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 4
+                    elif textWidth[Letter.capitalize()] <= 25: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 1
+                    elif textWidth[Letter.capitalize()] <= 26: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 1
+                    elif textWidth[Letter.capitalize()] <= 27: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  - 4
+                    elif textWidth[Letter.capitalize()] <= 28: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  
+                    elif textWidth[Letter.capitalize()] <= 33: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  - 1
+                    elif textWidth[Letter.capitalize()] <= 34: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  - 1
+                    
                     self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2), int(21*1.2))),(letterX_pos,self.buttonY_posList[self.buttonCount] + 10)) 
 
                 self.buttonCount = self.buttonCount + 1
