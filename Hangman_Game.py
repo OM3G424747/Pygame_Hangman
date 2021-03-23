@@ -23,6 +23,7 @@ Green_Colour = (0,255,0)
 Blue_Colour = (0,0,255)
 Grey_Colour = (100,100,100)
 LightGrey_Colour = (200,200,200)
+textWidth =  {"A": 26, "B": 20, "C": 22, "D": 26, "E": 17, "F": 17, "G": 24, "H": 28, "I": 13, "J": 16, "K": 25, "L": 19, "M": 33, "N": 28, "O": 25, "P": 19, "Q": 27, "R": 24, "S": 14, "T": 22, "U": 25, "V": 25, "W": 34, "X": 28, "Y": 25, "Z": 20}
 Clock = pygame.time.Clock()
 Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 Word_List = ["Apple", "Ball" ]
@@ -71,7 +72,7 @@ class keyselection:
                 self.buttonY_posList.append(self.topRowY_pos)
                 if Letter.capitalize() not in self.guessedLetters:
                     pygame.draw.rect(Game_Screen, (250,250,250), [self.buttonX_posList[self.buttonCount],self.topRowY_pos,self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
-                    self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (self.buttonWidth -20, self.buttonHeight - 20)),(self.buttonX_posList[self.buttonCount] + 10,self.topRowY_pos + 10)) 
+                    self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2), int(21*1.2))),(self.buttonX_posList[self.buttonCount] + 10,self.topRowY_pos + 10)) 
                 self.buttonCount = self.buttonCount + 1
                 self.rowButtonCounter = self.rowButtonCounter + 1
             
@@ -83,7 +84,12 @@ class keyselection:
                 self.buttonY_posList.append(self.topRowY_pos)
                 if Letter.capitalize() not in self.guessedLetters:
                     pygame.draw.rect(Game_Screen, (250,250,250), [self.buttonX_posList[self.buttonCount],self.buttonY_posList[self.buttonCount],self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
-                    self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (self.buttonWidth -20, self.buttonHeight - 20)),(self.buttonX_posList[self.buttonCount] + 10,self.buttonY_posList[self.buttonCount] + 10)) 
+                    #TODO - Update to center all letters based on their width!
+                    if textWidth[Letter.capitalize()] <= 13: #used to center text of the button based on it's width
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + 20 #adds spacing to the buttons X_pos to center it in the button 
+                    elif textWidth[Letter.capitalize()] >= 13:
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + 10
+                    self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2), int(21*1.2))),(letterX_pos,self.buttonY_posList[self.buttonCount] + 10)) 
 
                 self.buttonCount = self.buttonCount + 1
                 self.rowButtonCounter = self.rowButtonCounter + 1
@@ -131,6 +137,7 @@ class Game:
         selectWord = GameObject("assets/Menu/selectWord.png", 565,600,367,36)
         randomWord = GameObject("assets/Menu/randomWord.png", 565,675,442,36)
         
+
 
         A = GameObject("assets/A.png", 100,100,26,21)
         B = GameObject("assets/B.png", 100,100,20,21)
