@@ -24,6 +24,7 @@ Blue_Colour = (0,0,255)
 Grey_Colour = (100,100,100)
 LightGrey_Colour = (200,200,200)
 textWidth =  {"A": 26, "B": 20, "C": 22, "D": 26, "E": 17, "F": 17, "G": 24, "H": 28, "I": 13, "J": 16, "K": 25, "L": 19, "M": 33, "N": 28, "O": 25, "P": 19, "Q": 27, "R": 24, "S": 14, "T": 22, "U": 25, "V": 25, "W": 34, "X": 28, "Y": 25, "Z": 20}
+textcentering = {"A": 1, "B": 3, "C": 4, "D": 1, "E": 6, "F": 6, "G": 4, "H": 0, "I": 8, "J": 7, "K": 1, "L": 5, "M": -2, "N": 0, "O": 1, "P": 5, "Q": -4, "R": 4, "S": 9, "T": 4, "U": 1, "V": 1, "W": -3, "X": 0, "Y": 1, "Z": 3}
 Clock = pygame.time.Clock()
 Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 Word_List = ["Apple", "Ball" ]
@@ -51,7 +52,7 @@ class GameObject: #class for defining game objects that will be drawn onto the g
 
 class keyselection:
 #TODO - unclude section in function to take mouse X & Y pos, and "Click" bool to confirm if a button is clicked - corrolate with list for input to guess the letter 
-    def __init__(self, keyBoardLetters, keyGuessed, Game_Screen, StartX_pos):
+    def __init__(self, keyBoardLetters, keyGuessed, Game_Screen, StartX_pos, MouseX_pos, MouseY_pos, Click, KeyPress):
         self.Game_Screen = Game_Screen
         self.StartX_pos = StartX_pos
         self.guessedLetters = keyGuessed
@@ -66,16 +67,32 @@ class keyselection:
         self.topRowY_pos = 100
         self.buttonCount = 0
         self.keyBoardLetters = keyBoardLetters
+        buttonShadowSize = 5
         letterX_pos = 0
+        defaultButtonColour = (250,250,250)
+        highlightButtonColour = (100,250,250)
+        buttonShadowColour = (100,100,100)
     
         for Letter in self.keyBoardLetters:
             if self.buttonCount == 0: #used to check if starting point
                 self.buttonX_posList.append(self.StartX_pos)
                 self.buttonY_posList.append(self.topRowY_pos)
                 if Letter.capitalize() not in self.guessedLetters:
-                    pygame.draw.rect(Game_Screen, (250,250,250), [self.buttonX_posList[self.buttonCount],self.topRowY_pos,self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
-                    
-                    self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2), int(21*1.2))),(self.buttonX_posList[self.buttonCount] + 10,self.topRowY_pos + 10)) 
+                    pygame.draw.rect(Game_Screen, buttonShadowColour, [self.buttonX_posList[self.buttonCount] + buttonShadowSize,self.topRowY_pos + buttonShadowSize,self.buttonWidth + buttonShadowSize,self.buttonHeight + buttonShadowSize]) #sets surface shadown behind button
+                    if MouseX_pos >= self.buttonX_posList[self.buttonCount] and MouseX_pos <= self.buttonX_posList[self.buttonCount] + self.buttonWidth and MouseY_pos >= self.topRowY_pos and MouseY_pos <= self.topRowY_pos + self.buttonHeight and Click == False: #check for mouse over button
+                        pygame.draw.rect(Game_Screen, highlightButtonColour, [self.buttonX_posList[self.buttonCount],self.topRowY_pos,self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
+                        self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2), int(21*1.2))),(self.buttonX_posList[self.buttonCount] + 12,self.topRowY_pos + 15)) 
+                    elif MouseX_pos >= self.buttonX_posList[self.buttonCount] and MouseX_pos <= self.buttonX_posList[self.buttonCount] + self.buttonWidth and MouseY_pos >= self.topRowY_pos and MouseY_pos <= self.topRowY_pos + self.buttonHeight and Click == True:
+                        pygame.draw.rect(Game_Screen, highlightButtonColour, [self.buttonX_posList[self.buttonCount] + buttonShadowSize -2,self.topRowY_pos + buttonShadowSize -2,self.buttonWidth + buttonShadowSize -2,self.buttonHeight + buttonShadowSize -2])
+                        self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2)+ buttonShadowSize -2, int(21*1.2)+ buttonShadowSize -2)),(self.buttonX_posList[self.buttonCount] + 12+ buttonShadowSize -2,self.topRowY_pos + 15+ buttonShadowSize -2)) 
+                        GuessList.append(Letter.capitalize())
+                    elif KeyPress == Letter.capitalize():
+                        pygame.draw.rect(Game_Screen, highlightButtonColour, [self.buttonX_posList[self.buttonCount] + buttonShadowSize -2,self.topRowY_pos + buttonShadowSize -2,self.buttonWidth + buttonShadowSize -2,self.buttonHeight + buttonShadowSize -2])
+                        self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2)+ buttonShadowSize -2, int(21*1.2)+ buttonShadowSize -2)),(self.buttonX_posList[self.buttonCount] + 12+ buttonShadowSize -2,self.topRowY_pos + 15+ buttonShadowSize -2)) 
+                        GuessList.append(Letter.capitalize())
+                    else:
+                        pygame.draw.rect(Game_Screen, defaultButtonColour, [self.buttonX_posList[self.buttonCount],self.topRowY_pos,self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
+                        self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2), int(21*1.2))),(self.buttonX_posList[self.buttonCount] + 12,self.topRowY_pos + 15)) 
                 self.buttonCount = self.buttonCount + 1
                 self.rowButtonCounter = self.rowButtonCounter + 1
             
@@ -86,8 +103,6 @@ class keyselection:
                     self.buttonX_posList.append(self.buttonX_posList[self.buttonCount - 1] + self.buttonSpacing )
                 self.buttonY_posList.append(self.topRowY_pos)
                 if Letter.capitalize() not in self.guessedLetters:
-                    pygame.draw.rect(Game_Screen, (250,250,250), [self.buttonX_posList[self.buttonCount],self.buttonY_posList[self.buttonCount],self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
-                    #TODO - Update to center all letters based on their width!
                     if textWidth[Letter.capitalize()] <= 13: #used to center text of the button based on it's width
                         letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 8  #adds spacing to the buttons X_pos to center it in the button 
                     elif textWidth[Letter.capitalize()] <= 14: #used to center text of the button based on it's width
@@ -113,11 +128,36 @@ class keyselection:
                     elif textWidth[Letter.capitalize()] <= 28: #used to center text of the button based on it's width
                         letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  
                     elif textWidth[Letter.capitalize()] <= 33: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  - 1
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  - 2
                     elif textWidth[Letter.capitalize()] <= 34: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  - 1
+                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  - 3
+
+                    pygame.draw.rect(Game_Screen, buttonShadowColour, [self.buttonX_posList[self.buttonCount] + buttonShadowSize,self.topRowY_pos + buttonShadowSize,self.buttonWidth + buttonShadowSize,self.buttonHeight + buttonShadowSize]) #sets shadow on remaining alphabet buttons
+                    if MouseX_pos >= self.buttonX_posList[self.buttonCount] and MouseX_pos <= self.buttonX_posList[self.buttonCount] + self.buttonWidth and MouseY_pos >= self.topRowY_pos and MouseY_pos <= self.topRowY_pos + self.buttonHeight and Click == False:
+                        pygame.draw.rect(Game_Screen, highlightButtonColour, [self.buttonX_posList[self.buttonCount],self.buttonY_posList[self.buttonCount],self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
+                        self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2), int(21*1.2))),(letterX_pos,self.buttonY_posList[self.buttonCount] + 15)) 
                     
-                    self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2), int(21*1.2))),(letterX_pos,self.buttonY_posList[self.buttonCount] + 10)) 
+                    elif MouseX_pos >= self.buttonX_posList[self.buttonCount] and MouseX_pos <= self.buttonX_posList[self.buttonCount] + self.buttonWidth and MouseY_pos >= self.topRowY_pos and MouseY_pos <= self.topRowY_pos + self.buttonHeight and Click == True:
+                        pygame.draw.rect(Game_Screen, highlightButtonColour, [self.buttonX_posList[self.buttonCount] + buttonShadowSize -2,self.topRowY_pos + buttonShadowSize-2,self.buttonWidth + buttonShadowSize-2,self.buttonHeight + buttonShadowSize-2])
+                        self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2) + buttonShadowSize-2, int(21*1.2)+ buttonShadowSize-2)),(letterX_pos + buttonShadowSize-2,self.buttonY_posList[self.buttonCount] + 15 + buttonShadowSize-2)) 
+                        GuessList.append(Letter.capitalize())
+                    elif KeyPress == Letter.capitalize():
+                        pygame.draw.rect(Game_Screen, highlightButtonColour, [self.buttonX_posList[self.buttonCount] + buttonShadowSize -2,self.topRowY_pos + buttonShadowSize-2,self.buttonWidth + buttonShadowSize-2,self.buttonHeight + buttonShadowSize-2])
+                        self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2) + buttonShadowSize-2, int(21*1.2)+ buttonShadowSize-2)),(letterX_pos + buttonShadowSize-2,self.buttonY_posList[self.buttonCount] + 15 + buttonShadowSize-2))
+                        GuessList.append(Letter.capitalize())
+                    else:
+                        pygame.draw.rect(Game_Screen, defaultButtonColour, [self.buttonX_posList[self.buttonCount],self.buttonY_posList[self.buttonCount],self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
+                        self.Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (int(textWidth[Letter.capitalize()] *1.2), int(21*1.2))),(letterX_pos,self.buttonY_posList[self.buttonCount] + 15))  
+                    #TODO - Update to center all letters based on their width!
+                    
+                    
+                   
+                    
+                    
+                     
+                 
+
+                    
 
                 self.buttonCount = self.buttonCount + 1
                 self.rowButtonCounter = self.rowButtonCounter + 1
@@ -204,6 +244,9 @@ class Game:
                 mousePos = pygame.mouse.get_pos()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     click = True
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    click = False
+
 
                 if keys[pygame.K_ESCAPE] == True:
                     Game_Over = True 
@@ -262,6 +305,8 @@ class Game:
                     KeyLetter = "Y"
                 elif keys[pygame.K_z] == True: #Checks for Z Key - to be repeated for entire keyboard
                     KeyLetter = "Z"
+                else:
+                    KeyLetter = ""
 
             def displayLetter( Letter ):
                 if Letter.capitalize() == "A":
@@ -318,87 +363,86 @@ class Game:
                     Z.Draw(self.Game_Screen)
                 
             def changeLetterPos(Letter, newX_pos, newY_pos ):
+                
                 if Letter.capitalize() == "A":
-                    A.X_pos = newX_pos
+                    A.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     A.Y_pos = newY_pos
                 elif Letter.capitalize() == "B":
-                    B.X_pos = newX_pos
+                    B.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     B.Y_pos = newY_pos
                 elif Letter.capitalize() == "C":
-                    C.X_pos = newX_pos
+                    C.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     C.Y_pos = newY_pos
                 elif Letter.capitalize() == "D":
-                    D.X_pos = newX_pos
+                    D.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     D.Y_pos = newY_pos
                 elif Letter.capitalize() == "E":
-                    E.X_pos = newX_pos
+                    E.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     E.Y_pos = newY_pos
                 elif Letter.capitalize() == "F":
-                    F.X_pos = newX_pos
+                    F.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     F.Y_pos = newY_pos
                 elif Letter.capitalize() == "G":
-                    G.X_pos = newX_pos
+                    G.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     G.Y_pos = newY_pos
                 elif Letter.capitalize() == "H":
-                    H.X_pos = newX_pos
+                    H.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     H.Y_pos = newY_pos
                 elif Letter.capitalize() == "I":
-                    I.X_pos = newX_pos
+                    I.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     I.Y_pos = newY_pos
                 elif Letter.capitalize() == "J":
-                    J.X_pos = newX_pos
+                    J.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     J.Y_pos = newY_pos
                 elif Letter.capitalize() == "K":
-                    K.X_pos = newX_pos
+                    K.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     K.Y_pos = newY_pos
                 elif Letter.capitalize() == "L":
-                    L.X_pos = newX_pos
+                    L.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     L.Y_pos = newY_pos
                 elif Letter.capitalize() == "M":
-                    M.X_pos = newX_pos
+                    M.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     M.Y_pos = newY_pos
                 elif Letter.capitalize() == "N":
-                    N.X_pos = newX_pos
+                    N.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     N.Y_pos = newY_pos
                 elif Letter.capitalize() == "O":
-                    O.X_pos = newX_pos
+                    O.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     O.Y_pos = newY_pos
                 elif Letter.capitalize() == "P":
-                    P.X_pos = newX_pos
+                    P.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     P.Y_pos = newY_pos
                 elif Letter.capitalize() == "Q":
-                    Q.X_pos = newX_pos
+                    Q.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     Q.Y_pos = newY_pos
                 elif Letter.capitalize() == "R":
-                    R.X_pos = newX_pos
+                    R.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     R.Y_pos = newY_pos
                 elif Letter.capitalize() == "S":
-                    S.X_pos = newX_pos
+                    S.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     S.Y_pos = newY_pos
                 elif Letter.capitalize() == "T":
-                    T.X_pos = newX_pos
+                    T.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     T.Y_pos = newY_pos
                 elif Letter.capitalize() == "U":
-                    U.X_pos = newX_pos
+                    U.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     U.Y_pos = newY_pos
                 elif Letter.capitalize() == "V":
-                    V.X_pos = newX_pos
+                    V.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     V.Y_pos = newY_pos
                 elif Letter.capitalize() == "W":
-                    W.X_pos = newX_pos
+                    W.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     W.Y_pos = newY_pos
                 elif Letter.capitalize() == "X":
-                    X.X_pos = newX_pos
+                    X.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     X.Y_pos = newY_pos
                 elif Letter.capitalize() == "Y":
-                    Y.X_pos = newX_pos
+                    Y.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     Y.Y_pos = newY_pos
                 elif Letter.capitalize() == "Z":
-                    Z.X_pos = newX_pos
+                    Z.X_pos = newX_pos + textcentering[Letter.capitalize()]
                     Z.Y_pos = newY_pos
 
-            def KeyboardDisplay():
-                pass #add function to display on screen keyboard 
 
             #ToDo - possibly add option for AI difficulty to increase     
             if GameMenu == True and OnePlayerGame == False and TwoPlayerGame == False:
@@ -429,14 +473,10 @@ class Game:
                 selectWord.Draw(self.Game_Screen)
                 randomWord.Draw(self.Game_Screen)
                 if mousePos[0] >= selectWord.X_pos and mousePos[1] >= selectWord.Y_pos and mousePos[0] <= selectWord.X_pos + 367 and mousePos[1] <=  selectWord.Y_pos + 36:
-                    print(mousePos)
-                    print("You clicked on Select a Word Mode")
                     if click == True:
                         ChooseWord = True
                         click = False
                 elif mousePos[0] >= randomWord.X_pos and mousePos[1] >= randomWord.Y_pos and mousePos[0] <= randomWord.X_pos + 442 and mousePos[1] <=  randomWord.Y_pos + 36:
-                    print(mousePos)
-                    print("You clicked on Random Word Mode")
                     if click == True:
                         RandomWord = True
                         click = False
@@ -452,17 +492,17 @@ class Game:
                 if RandomWord == True:
 
                     
-#TODO - Turn into a function for displaying words on screen                 
+#TODO - Turn into a function for displaying words on screen  
+#TODO - add a function to wipe the guesslist at the start if a new round               
                     Word = Word_List[numSelect]
                      #TODO - Capatilze word before going into guessing loop!
                     X_posList = []
                     Counter = 0
                 
-                    
-                    if KeyLetter not in GuessList:
-                        GuessList.append(KeyLetter)
+                    ### CONTINUE HERE!!!!!!!!!!!!!!!!!!
+                    #TODO - Create a function to compare the guess list and the Word - Convert word into a list. Total turns = 8 (score should be determined by deducting the word unique characters from the guess list, excess characters should count towards the turns taken )
                         
-                    keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 1000)
+                    keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 1000, mousePos[0], mousePos[1], click, KeyLetter, Word)
                     for Letter in Word:
                         Letter = Letter
                         Y_pos = 500 #Yposition of where the word will be displayed
