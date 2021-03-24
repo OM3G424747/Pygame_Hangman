@@ -39,6 +39,8 @@ for line in OpenFile:
 print(Word_List)
 GuessList = []
 
+SelectionY_pos = [] #Yposition for word selection - Placed outside of gameloop to make text move
+
 
 class GameObject: #class for defining game objects that will be drawn onto the game screen and moved arround
     def __init__(self, image_path, X_pos, Y_pos, Width, Height):
@@ -64,9 +66,9 @@ class keyselection:
         self.buttonHeight = 55 #set height of keyboard buttons 
         self.buttonSpacing = self.buttonWidth + 17 #number added determines the spacing between buttons 
         self.letterSpacing = 10
-        self.numberOfButtonsinRow = 7 
+        self.numberOfButtonsinRow = 10 
         self.rowButtonCounter = 0
-        self.topRowY_pos = 100
+        self.topRowY_pos = 550
         self.buttonCount = 0
         self.keyBoardLetters = keyBoardLetters
         buttonShadowSize = 5
@@ -74,6 +76,8 @@ class keyselection:
         defaultButtonColour = (250,250,250)
         highlightButtonColour = (100,250,250)
         buttonShadowColour = (100,100,100)
+        numberOfRows = 0
+        
        
     
         for Letter in self.keyBoardLetters:
@@ -138,12 +142,33 @@ class keyselection:
                 self.rowButtonCounter = self.rowButtonCounter + 1
                 if self.rowButtonCounter == self.numberOfButtonsinRow: #condition to check if the max number of buttons for the row have been reached
                     self.topRowY_pos = self.topRowY_pos + self.buttonSpacing #Adjusts the Y_pos down based on button spacing
+                    numberOfRows = numberOfRows + 1
+                    self.numberOfButtonsinRow = self.numberOfButtonsinRow - numberOfRows #reduces the number of buttons in the row based on the number of rows on display
+                    self.StartX_pos = self.StartX_pos + 50 #adds 50 points to the right of the X_Pos of the start of the previous row 
                     self.rowButtonCounter = 0 #resets counter for the start of a new row
             
             elif self.buttonCount == len(self.keyBoardLetters): #Resets the button count in the event all keys are drawn in a single row
                 self.buttonCount = 0
 
             
+def stringToText(string, X_pos, Y_pos, Game_Screen ):
+    X_posList = []
+    counter = 0
+    spacing = 25
+    X_posList.append(X_pos)
+    for Letter in string:
+        if Letter == " ":
+            X_posList.append( X_posList[counter] + spacing )
+            counter = counter + 1
+            if counter > len(string):
+                counter = 0
+
+        else:
+            Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (textWidth[Letter.capitalize()] , 21)),(X_posList[counter] + textCentering[Letter.capitalize()],Y_pos))
+            X_posList.append( X_posList[counter] + spacing )#+ textCentering[Letter.capitalize()])
+            counter = counter + 1
+            if counter > len(string):
+                counter = 0
 
 
 class Game:
@@ -485,11 +510,12 @@ class Game:
                     ### CONTINUE HERE!!!!!!!!!!!!!!!!!!
                     #TODO - Create a function to compare the guess list and the Word - Convert word into a list. Total turns = 8 (score should be determined by deducting the word unique characters from the guess list, excess characters should count towards the turns taken )
                         
-                    keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 1000, mousePos[0], mousePos[1], click, KeyLetter)
+                    keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 450, mousePos[0], mousePos[1], click, KeyLetter)
                     scoreCheck(GuessList , Word)
                     for Letter in Word:
                         Letter = Letter
-                        Y_pos = 500 #Yposition of where the word will be displayed
+                        Y_pos = 400 #Yposition of where the word will be displayed
+                        X_pos = 650
                         if Counter >= 1:
                             X_posList.append(X_posList[Counter - 1] + 33)
                             changeLetterPos(Letter, X_posList[Counter], Y_pos )
@@ -501,12 +527,61 @@ class Game:
                                 Counter = 0
                                 
                         elif Counter == 0:
-                            X_posList.append(600) # set starting postion of first letter 
+                            X_posList.append(X_pos) # set starting postion of first letter 
                             changeLetterPos(Letter ,X_posList[Counter], Y_pos)
                             if Letter.capitalize() in GuessList:
                                 displayLetter(Letter)
                             pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
                             Counter = Counter + 1
+                
+                elif ChooseWord == True:
+                    
+                    startingX_pos = 650
+                    startingY_pos = 20
+                    #SelectionY_pos = []
+                    Counter = 0
+                    startingRange = 1
+                    endingRange = 20
+                    scrollSpeed = 10
+
+                    for i in range(startingRange,endingRange):
+                        
+                        SelectionY_pos.append(startingY_pos)
+                        
+                        Counter = Counter + 1
+                        startingY_pos = startingY_pos + 45
+                        
+                        if keys[pygame.K_DOWN] == True:
+                            stringToText(Word_List[i-1], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
+                            if SelectionY_pos[startingRange - 1] >= 30 and startingRange == 1:
+                                scrollSpeed = 0
+                                SelectionY_pos[startingRange - 1] = 20
+                            SelectionY_pos[i-1] = SelectionY_pos[i-1] + scrollSpeed
+                            
+
+                        elif keys[pygame.K_UP] == True: #continue Here - add a selection to increment the list 
+                            stringToText(Word_List[i-1], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
+                            SelectionY_pos[i-1] = SelectionY_pos[i-1] - scrollSpeed
+                            if SelectionY_pos[-1] <= 1000:
+                                startingRange = startingRange + 1
+                                endingRange = endingRange + 1
+                                print(startingRange)  #Create a counter that counts up the word list to modify the words that get displayed from the list
+                            
+                            
+                        
+                        else:    
+                            SelectionY_pos[i-1] = SelectionY_pos[i-1]
+                            stringToText(Word_List[i-1], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
+                        
+                    """
+                    if keys[pygame.K_DOWN] == True:
+                        print("YUPITsWORKING")
+                        for num in range(len(SelectionY_pos)):
+                            print (SelectionY_pos[num])
+                            SelectionY_pos[num] = SelectionY_pos[num] + 1
+                            stringToText(Word_List[num - 1], startingX_pos, SelectionY_pos[num - 1], self.Game_Screen)
+                    """
+                        
 
                         
                 
