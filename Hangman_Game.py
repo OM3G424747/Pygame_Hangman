@@ -308,6 +308,14 @@ class Game:
                 else:
                     KeyLetter = ""
 
+            def scoreCheck(Guesslist, Word):
+                score = 0
+                for Letter in GuessList:
+                    if Letter.capitalize() not in list(Word.upper()):
+                        score = score + 1
+                        print(score) #TODO - work on method to blit hangman on screen
+
+            
             def displayLetter( Letter ):
                 if Letter.capitalize() == "A":
                     A.Draw(self.Game_Screen)
@@ -502,7 +510,8 @@ class Game:
                     ### CONTINUE HERE!!!!!!!!!!!!!!!!!!
                     #TODO - Create a function to compare the guess list and the Word - Convert word into a list. Total turns = 8 (score should be determined by deducting the word unique characters from the guess list, excess characters should count towards the turns taken )
                         
-                    keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 1000, mousePos[0], mousePos[1], click, KeyLetter, Word)
+                    keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 1000, mousePos[0], mousePos[1], click, KeyLetter)
+                    scoreCheck(GuessList , Word)
                     for Letter in Word:
                         Letter = Letter
                         Y_pos = 500 #Yposition of where the word will be displayed
