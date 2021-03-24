@@ -23,8 +23,10 @@ Green_Colour = (0,255,0)
 Blue_Colour = (0,0,255)
 Grey_Colour = (100,100,100)
 LightGrey_Colour = (200,200,200)
+#TextWidth Dictionary contains width settings for each of the letters being used 
 textWidth =  {"A": 26, "B": 20, "C": 22, "D": 26, "E": 17, "F": 17, "G": 24, "H": 28, "I": 13, "J": 16, "K": 25, "L": 19, "M": 33, "N": 28, "O": 25, "P": 19, "Q": 27, "R": 24, "S": 14, "T": 22, "U": 25, "V": 25, "W": 34, "X": 28, "Y": 25, "Z": 20}
-textcentering = {"A": 1, "B": 3, "C": 4, "D": 1, "E": 6, "F": 6, "G": 4, "H": 0, "I": 8, "J": 7, "K": 1, "L": 5, "M": -2, "N": 0, "O": 1, "P": 5, "Q": -4, "R": 4, "S": 9, "T": 4, "U": 1, "V": 1, "W": -3, "X": 0, "Y": 1, "Z": 3}
+#TextCentering Dictionary includes spacing to help center the text images based on their size
+textCentering = {"A": 1, "B": 3, "C": 4, "D": 1, "E": 6, "F": 6, "G": 4, "H": 0, "I": 8, "J": 7, "K": 1, "L": 5, "M": -2, "N": 0, "O": 1, "P": 5, "Q": -4, "R": 4, "S": 9, "T": 4, "U": 1, "V": 1, "W": -3, "X": 0, "Y": 1, "Z": 3}
 Clock = pygame.time.Clock()
 Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 Word_List = ["Apple", "Ball" ]
@@ -74,7 +76,7 @@ class keyselection:
         buttonShadowColour = (100,100,100)
     
         for Letter in self.keyBoardLetters:
-            if self.buttonCount == 0: #used to check if starting point
+            if self.buttonCount == 0: #used to check if starting point / upper right corner of keyselection
                 self.buttonX_posList.append(self.StartX_pos)
                 self.buttonY_posList.append(self.topRowY_pos)
                 if Letter.capitalize() not in self.guessedLetters:
@@ -96,42 +98,14 @@ class keyselection:
                 self.buttonCount = self.buttonCount + 1
                 self.rowButtonCounter = self.rowButtonCounter + 1
             
-            elif self.buttonCount > 0 and self.buttonCount < len(self.keyBoardLetters): #used to check continuation on starting point 
+            elif self.buttonCount > 0 and self.buttonCount < len(self.keyBoardLetters): #used to check continuation based on starting point 
                 if self.rowButtonCounter == 0:  #used to check if it's the start of a new row or not. 0 = start of new row
                     self.buttonX_posList.append(self.StartX_pos )
                 elif self.rowButtonCounter > 0: #used to see if it's the second button in a row being displayed or not
                     self.buttonX_posList.append(self.buttonX_posList[self.buttonCount - 1] + self.buttonSpacing )
                 self.buttonY_posList.append(self.topRowY_pos)
                 if Letter.capitalize() not in self.guessedLetters:
-                    if textWidth[Letter.capitalize()] <= 13: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 8  #adds spacing to the buttons X_pos to center it in the button 
-                    elif textWidth[Letter.capitalize()] <= 14: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 9 
-                    elif textWidth[Letter.capitalize()] <= 16: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 7
-                    elif textWidth[Letter.capitalize()] <= 17: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 6
-                    elif textWidth[Letter.capitalize()] <= 19: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 5
-                    elif textWidth[Letter.capitalize()] <= 20: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 3
-                    elif textWidth[Letter.capitalize()] <= 22: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 4
-                    elif textWidth[Letter.capitalize()] <= 24: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 4
-                    elif textWidth[Letter.capitalize()] <= 25: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 1
-                    elif textWidth[Letter.capitalize()] <= 26: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + 1
-                    elif textWidth[Letter.capitalize()] <= 27: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  - 4
-                    elif textWidth[Letter.capitalize()] <= 28: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  
-                    elif textWidth[Letter.capitalize()] <= 33: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  - 2
-                    elif textWidth[Letter.capitalize()] <= 34: #used to center text of the button based on it's width
-                        letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing  - 3
-
+                    letterX_pos = self.buttonX_posList[self.buttonCount] + self.letterSpacing + textCentering[Letter.capitalize()] #variable used to calculate X_Pos of the letter
                     pygame.draw.rect(Game_Screen, buttonShadowColour, [self.buttonX_posList[self.buttonCount] + buttonShadowSize,self.topRowY_pos + buttonShadowSize,self.buttonWidth + buttonShadowSize,self.buttonHeight + buttonShadowSize]) #sets shadow on remaining alphabet buttons
                     if MouseX_pos >= self.buttonX_posList[self.buttonCount] and MouseX_pos <= self.buttonX_posList[self.buttonCount] + self.buttonWidth and MouseY_pos >= self.topRowY_pos and MouseY_pos <= self.topRowY_pos + self.buttonHeight and Click == False:
                         pygame.draw.rect(Game_Screen, highlightButtonColour, [self.buttonX_posList[self.buttonCount],self.buttonY_posList[self.buttonCount],self.buttonWidth,self.buttonHeight]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
@@ -151,22 +125,13 @@ class keyselection:
                     #TODO - Update to center all letters based on their width!
                     
                     
-                   
-                    
-                    
-                     
-                 
-
-                    
-
                 self.buttonCount = self.buttonCount + 1
                 self.rowButtonCounter = self.rowButtonCounter + 1
-                if self.rowButtonCounter == self.numberOfButtonsinRow:
-                    self.topRowY_pos = self.topRowY_pos + self.buttonSpacing
-                    self.rowButtonCounter = 0
-
+                if self.rowButtonCounter == self.numberOfButtonsinRow: #condition to check if the max number of buttons for the row have been reached
+                    self.topRowY_pos = self.topRowY_pos + self.buttonSpacing #Adjusts the Y_pos down based on button spacing
+                    self.rowButtonCounter = 0 #resets counter for the start of a new row
             
-            elif self.buttonCount == len(self.keyBoardLetters):
+            elif self.buttonCount == len(self.keyBoardLetters): #Resets the button count in the event all keys are drawn in a single row
                 self.buttonCount = 0
 
             
@@ -308,6 +273,7 @@ class Game:
                 else:
                     KeyLetter = ""
 
+            #function used to check how many turns are left by comparing the letters guessed with the letter in the word being guessed 
             def scoreCheck(Guesslist, Word):
                 score = 0
                 for Letter in GuessList:
@@ -373,82 +339,82 @@ class Game:
             def changeLetterPos(Letter, newX_pos, newY_pos ):
                 
                 if Letter.capitalize() == "A":
-                    A.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    A.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     A.Y_pos = newY_pos
                 elif Letter.capitalize() == "B":
-                    B.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    B.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     B.Y_pos = newY_pos
                 elif Letter.capitalize() == "C":
-                    C.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    C.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     C.Y_pos = newY_pos
                 elif Letter.capitalize() == "D":
-                    D.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    D.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     D.Y_pos = newY_pos
                 elif Letter.capitalize() == "E":
-                    E.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    E.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     E.Y_pos = newY_pos
                 elif Letter.capitalize() == "F":
-                    F.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    F.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     F.Y_pos = newY_pos
                 elif Letter.capitalize() == "G":
-                    G.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    G.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     G.Y_pos = newY_pos
                 elif Letter.capitalize() == "H":
-                    H.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    H.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     H.Y_pos = newY_pos
                 elif Letter.capitalize() == "I":
-                    I.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    I.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     I.Y_pos = newY_pos
                 elif Letter.capitalize() == "J":
-                    J.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    J.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     J.Y_pos = newY_pos
                 elif Letter.capitalize() == "K":
-                    K.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    K.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     K.Y_pos = newY_pos
                 elif Letter.capitalize() == "L":
-                    L.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    L.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     L.Y_pos = newY_pos
                 elif Letter.capitalize() == "M":
-                    M.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    M.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     M.Y_pos = newY_pos
                 elif Letter.capitalize() == "N":
-                    N.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    N.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     N.Y_pos = newY_pos
                 elif Letter.capitalize() == "O":
-                    O.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    O.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     O.Y_pos = newY_pos
                 elif Letter.capitalize() == "P":
-                    P.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    P.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     P.Y_pos = newY_pos
                 elif Letter.capitalize() == "Q":
-                    Q.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    Q.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     Q.Y_pos = newY_pos
                 elif Letter.capitalize() == "R":
-                    R.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    R.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     R.Y_pos = newY_pos
                 elif Letter.capitalize() == "S":
-                    S.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    S.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     S.Y_pos = newY_pos
                 elif Letter.capitalize() == "T":
-                    T.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    T.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     T.Y_pos = newY_pos
                 elif Letter.capitalize() == "U":
-                    U.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    U.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     U.Y_pos = newY_pos
                 elif Letter.capitalize() == "V":
-                    V.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    V.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     V.Y_pos = newY_pos
                 elif Letter.capitalize() == "W":
-                    W.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    W.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     W.Y_pos = newY_pos
                 elif Letter.capitalize() == "X":
-                    X.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    X.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     X.Y_pos = newY_pos
                 elif Letter.capitalize() == "Y":
-                    Y.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    Y.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     Y.Y_pos = newY_pos
                 elif Letter.capitalize() == "Z":
-                    Z.X_pos = newX_pos + textcentering[Letter.capitalize()]
+                    Z.X_pos = newX_pos + textCentering[Letter.capitalize()]
                     Z.Y_pos = newY_pos
 
 
