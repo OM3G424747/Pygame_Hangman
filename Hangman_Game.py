@@ -26,10 +26,10 @@ LightGrey_Colour = (200,200,200)
 #TextWidth Dictionary contains width settings for each of the letters being used 
 textWidth =  {"A": 26, "B": 20, "C": 22, "D": 26, "E": 17, "F": 17, "G": 24, "H": 28, "I": 13, "J": 16, "K": 25, "L": 19, "M": 33, "N": 28, "O": 25, "P": 19, "Q": 27, "R": 24, "S": 14, "T": 22, "U": 25, "V": 25, "W": 34, "X": 28, "Y": 25, "Z": 20}
 #TextCentering Dictionary includes spacing to help center the text images based on their size
-textCentering = {"A": 1, "B": 3, "C": 4, "D": 1, "E": 6, "F": 6, "G": 4, "H": 0, "I": 8, "J": 7, "K": 1, "L": 5, "M": -2, "N": 0, "O": 1, "P": 5, "Q": -4, "R": 4, "S": 9, "T": 4, "U": 1, "V": 1, "W": -3, "X": 0, "Y": 1, "Z": 3}
+textCentering = {"A": 1, "B": 2, "C": 2, "D": 0, "E": 5, "F": 6, "G": 2, "H": 0, "I": 7, "J": 7, "K": 1, "L": 4, "M": -2, "N": 0, "O": 1, "P": 5, "Q": -4, "R": 3, "S": 7, "T": 3, "U": 1, "V": 2, "W": -3, "X": 0, "Y": 1, "Z": 3}
 Clock = pygame.time.Clock()
 Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-Word_List = ["Apple", "Ball" ]
+Word_List = []
 OpenFile = "assets/wordList.txt"
 OpenFile = open(OpenFile)
 for line in OpenFile:
@@ -164,10 +164,9 @@ def stringToText(string, X_pos, Y_pos, Game_Screen ):
             counter = counter + 1
             if counter > len(string):
                 counter = 0
-
         else:
             Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (textWidth[Letter.capitalize()] , 21)),(X_posList[counter] + textCentering[Letter.capitalize()],Y_pos))
-            X_posList.append( X_posList[counter] + spacing )#+ textCentering[Letter.capitalize()])
+            X_posList.append( X_posList[counter] + spacing - textCentering[Letter.capitalize()] )#+ textCentering[Letter.capitalize()])
             counter = counter + 1
             if counter > len(string):
                 counter = 0
@@ -539,66 +538,46 @@ class Game:
                 elif ChooseWord == True:
                     
                     startingX_pos = 650
-                    startingY_pos = 20
-                    
+                    startingY_pos = -40
+                    textHeight = 21
                     Counter = 0
                     startingRange = 1
-                    endingRange = 20
-                    scrollSpeed = 10
-                    spaceBetweenWords = 45
+                    endingRange = 23
+                    scrollSpeed = 40
+                    spaceBetweenWords = 40
                     
                     #create list with the list positions for words
                     #SelectionY_pos list moved to outside of gameloop, or else text won't move
 
                     for i in range(startingRange,endingRange):
-                        
-                        SelectionY_pos.append(startingY_pos)
-                        selectionRangeList.append(Counter)
-                        
+                        if len(selectionRangeList) < endingRange - 1:
+                            SelectionY_pos.append(startingY_pos)
+                            selectionRangeList.append(Counter)
                         Counter = Counter + 1
                         startingY_pos = startingY_pos + spaceBetweenWords
                         
-                        
+                        stringToText(Word_List[selectionRangeList[i-1]], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
 
                         if keys[pygame.K_DOWN] == True:
-                            stringToText(Word_List[selectionRangeList[i-1]], startingX_pos, SelectionY_pos[i-1], self.Game_Screen) #use list of numbers to blit a different word onto the screan, and increase those numbers as the screen scrolls down 
-                            if SelectionY_pos[startingRange - 1] >= 30 and startingRange == 1:
-                                scrollSpeed = 0
-                                SelectionY_pos[startingRange - 1] = 20
+                            #use list of numbers to blit a different word onto the screan, and increase those numbers as the screen scrolls down 
                             SelectionY_pos[i-1] = SelectionY_pos[i-1] + scrollSpeed
-                            
+                            if SelectionY_pos[i-1] >= Screen_Height + spaceBetweenWords :
+                                selectionRangeList[i-1] = selectionRangeList[i-1] - endingRange 
+                                print(selectionRangeList)
+                                SelectionY_pos[i-1] = 0 - spaceBetweenWords
 
                         elif keys[pygame.K_UP] == True: #continue Here - add a selection to increment the list 
-                            stringToText(Word_List[selectionRangeList[i-1]], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
                             SelectionY_pos[i-1] = SelectionY_pos[i-1] - scrollSpeed
-                            if SelectionY_pos[0] <= -20:
+                            if SelectionY_pos[i-1] < 0 - spaceBetweenWords :
+                                selectionRangeList[i-1] = selectionRangeList[i-1] + endingRange 
+                                print(selectionRangeList)
+                                SelectionY_pos[i-1] = Screen_Height
                                 
-                                #TODO - fix list selection - use star list as referance - change and loop when it meets the edge 
-                                selectionRangeList[i-1] = selectionRangeList[i-1] + 1
-                                if i <= endingRange -2:
-                                    SelectionY_pos[i-1] = SelectionY_pos[i]
-                                elif i == endingRange -1:
-                                    SelectionY_pos[-1] = SelectionY_pos[i-1] + spaceBetweenWords
-                                    selectionRangeList[-1] = selectionRangeList[i-1] + 1
-
-                                
-                                
-                                
-                            
-                            
-                        
                         else:    
                             SelectionY_pos[i-1] = SelectionY_pos[i-1]
-                            stringToText(Word_List[i-1], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
+                            #stringToText(Word_List[i-1], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
                         
-                    """
-                    if keys[pygame.K_DOWN] == True:
-                        print("YUPITsWORKING")
-                        for num in range(len(SelectionY_pos)):
-                            print (SelectionY_pos[num])
-                            SelectionY_pos[num] = SelectionY_pos[num] + 1
-                            stringToText(Word_List[num - 1], startingX_pos, SelectionY_pos[num - 1], self.Game_Screen)
-                    """
+                    
                         
 
                         
