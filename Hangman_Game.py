@@ -555,8 +555,15 @@ class Game:
                             selectionRangeList.append(Counter)
                         Counter = Counter + 1
                         startingY_pos = startingY_pos + spaceBetweenWords
-                        
-                        stringToText(Word_List[selectionRangeList[i-1]], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
+                        wordWidth = 0
+                       
+                    
+                        if mousePos[0] >= startingX_pos and mousePos[0] <= startingX_pos + len(Word_List[selectionRangeList[i-1]]) * 25 and mousePos[1] >= SelectionY_pos[i-1] and mousePos[1] <= SelectionY_pos[i-1] + textHeight:
+                            stringToText(Word_List[selectionRangeList[i-1]], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
+                            pygame.draw.rect(self.Game_Screen, (255,0,0), [startingX_pos,SelectionY_pos[i-1],len(Word_List[selectionRangeList[i-1]]) * 25,20])
+                            #TODO - add a function to caculatee the average length of a word being printed - feed into Y pos hitbox    
+                        else:
+                            stringToText(Word_List[selectionRangeList[i-1]], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
 
                         if keys[pygame.K_DOWN] == True:
                             #use list of numbers to blit a different word onto the screan, and increase those numbers as the screen scrolls down 
