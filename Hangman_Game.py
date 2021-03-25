@@ -573,7 +573,7 @@ class Game:
                             SelectionY_pos[i-1] = SelectionY_pos[i-1] - scrollSpeed
                             if SelectionY_pos[0] <= -20:
                                 
-                                #TODO - fix list selection 
+                                #TODO - fix list selection - use star list as referance - change and loop when it meets the edge 
                                 selectionRangeList[i-1] = selectionRangeList[i-1] + 1
                                 if i <= endingRange -2:
                                     SelectionY_pos[i-1] = SelectionY_pos[i]
