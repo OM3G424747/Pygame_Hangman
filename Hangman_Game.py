@@ -39,7 +39,9 @@ for line in OpenFile:
 print(Word_List)
 GuessList = []
 
+#lists used for word selection list 
 SelectionY_pos = [] #Yposition for word selection - Placed outside of gameloop to make text move
+selectionRangeList = []
 
 
 class GameObject: #class for defining game objects that will be drawn onto the game screen and moved arround
@@ -538,21 +540,28 @@ class Game:
                     
                     startingX_pos = 650
                     startingY_pos = 20
-                    #SelectionY_pos = []
+                    
                     Counter = 0
                     startingRange = 1
                     endingRange = 20
                     scrollSpeed = 10
+                    spaceBetweenWords = 45
+                    
+                    #create list with the list positions for words
+                    #SelectionY_pos list moved to outside of gameloop, or else text won't move
 
                     for i in range(startingRange,endingRange):
                         
                         SelectionY_pos.append(startingY_pos)
+                        selectionRangeList.append(Counter)
                         
                         Counter = Counter + 1
-                        startingY_pos = startingY_pos + 45
+                        startingY_pos = startingY_pos + spaceBetweenWords
                         
+                        
+
                         if keys[pygame.K_DOWN] == True:
-                            stringToText(Word_List[i-1], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
+                            stringToText(Word_List[selectionRangeList[i-1]], startingX_pos, SelectionY_pos[i-1], self.Game_Screen) #use list of numbers to blit a different word onto the screan, and increase those numbers as the screen scrolls down 
                             if SelectionY_pos[startingRange - 1] >= 30 and startingRange == 1:
                                 scrollSpeed = 0
                                 SelectionY_pos[startingRange - 1] = 20
@@ -560,12 +569,21 @@ class Game:
                             
 
                         elif keys[pygame.K_UP] == True: #continue Here - add a selection to increment the list 
-                            stringToText(Word_List[i-1], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
+                            stringToText(Word_List[selectionRangeList[i-1]], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
                             SelectionY_pos[i-1] = SelectionY_pos[i-1] - scrollSpeed
-                            if SelectionY_pos[-1] <= 1000:
-                                startingRange = startingRange + 1
-                                endingRange = endingRange + 1
-                                print(startingRange)  #Create a counter that counts up the word list to modify the words that get displayed from the list
+                            if SelectionY_pos[0] <= -20:
+                                
+                                #TODO - fix list selection 
+                                selectionRangeList[i-1] = selectionRangeList[i-1] + 1
+                                if i <= endingRange -2:
+                                    SelectionY_pos[i-1] = SelectionY_pos[i]
+                                elif i == endingRange -1:
+                                    SelectionY_pos[-1] = SelectionY_pos[i-1] + spaceBetweenWords
+                                    selectionRangeList[-1] = selectionRangeList[i-1] + 1
+
+                                
+                                
+                                
                             
                             
                         
