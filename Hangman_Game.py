@@ -196,6 +196,7 @@ class Game:
     def run_game_loop (self):
         click = False
         Game_Over = False
+        Round_Over = False
         GameMenu = True
         Game_On = False
         OnePlayerGame = False #sets game into a state where you play against the CPU
@@ -207,11 +208,18 @@ class Game:
         turn = ""
         onScreenKeyBoard = "qwertyuiopasdfghjklzxcvbnm"
         Word = ""
+        #ammount of turns to take with each difficulty setting
+       
+        Easy = 16
+        Medium = 12
+        Hard = 8
+        Difficulty = Medium #Defaults to medium 
+
 
  
         title = GameObject("assets/Menu/Title.png", 650,100,896,110) 
-        onePlayer = GameObject("assets/Menu/singlePlayer.png", 1200,400,233,34)
-        twoPlayer = GameObject("assets/Menu/2Player.png", 1200,475,241,34)
+        onePlayer = GameObject("assets/Menu/singlePlayer.png", 1225,400,233,34)
+        twoPlayer = GameObject("assets/Menu/2Player.png", 1225,475,241,34)
         selectWord = GameObject("assets/Menu/selectWord.png", 1115,400,367,36)
         randomWord = GameObject("assets/Menu/randomWord.png", 1115,475,442,36)
         
@@ -325,7 +333,7 @@ class Game:
                     if Letter.capitalize() not in list(Word.upper()):
                         score = score + 1
                         print(score) #TODO - work on method to blit hangman on screen
-
+                return score
             
             def displayLetter( Letter ):
                 if Letter.capitalize() == "A":
@@ -470,6 +478,12 @@ class Game:
                 title.Draw(self.Game_Screen)
                 onePlayer.Draw(self.Game_Screen)
                 twoPlayer.Draw(self.Game_Screen)
+                stringToText("Choose your difficulty", 650, 400, self.Game_Screen)
+                stringToText("Easy for sixteen turns", 650, 475, self.Game_Screen)
+                stringToText("Medium for twelve turns", 650, 510, self.Game_Screen)
+                stringToText("Hard for eight turns", 650, 540, self.Game_Screen)
+
+
                 numSelect = random.randint(0,len(Word_List)) #selects a random int to correlate with a word in the word list 
                 if event.type == pygame.MOUSEBUTTONDOWN and mousePos[0] >= onePlayer.X_pos and mousePos[1] >= onePlayer.Y_pos and mousePos[0] <= onePlayer.X_pos + 233 and mousePos[1] <=  onePlayer.Y_pos + 34:
                     print(mousePos)
@@ -510,18 +524,18 @@ class Game:
             elif GameMenu == True and RandomWord == True or ChooseWord == True :
                 self.Game_Screen.fill(LightGrey_Colour)
                 
-                if GameMenu == True and Game_On == True:
+#Main GameLoop ----------------------------------------------------------------------------------------------------------------------------------------------
+                if GameMenu == True and Game_On == True and Round_Over == False:
+#TODO - add a function to wipe the guesslist at the start if a new round                   
 
-#TODO - add a function to wipe the guesslist at the start if a new round               
-                    
-                     #TODO - Capatilze word before going into guessing loop!
                     X_posList = []
                     Counter = 0
-                
-                    ### CONTINUE HERE!!!!!!!!!!!!!!!!!!
-                        
+                    ### CONTINUE HERE!!!!!!!!!!!!!!!!!! 
+                    #TODO - create a funciton to check if all the letters have been guessed and increase score by 1                       
                     keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 450, mousePos[0], mousePos[1], click, KeyLetter)
                     scoreCheck(GuessList , Word)
+                    if scoreCheck(GuessList , Word) >= Difficulty:
+                        Round_Over = True
                     wordCenter = len(Word) *33
                     for Letter in Word:
                         Letter = Letter
@@ -544,6 +558,14 @@ class Game:
                                 displayLetter(Letter)
                             pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
                             Counter = Counter + 1
+                
+                #display when the round is over and max number of tries have been reached 
+                elif GameMenu == True and Round_Over == True: 
+                    self.Game_Screen.fill(LightGrey_Colour)
+                    outline.Draw(self.Game_Screen)
+                    stringToText("Round Over", 750, 500, self.Game_Screen )
+                    #display if player won or lost 
+                    #display current scoreboared
                 
                 elif ChooseWord == True:
                     
