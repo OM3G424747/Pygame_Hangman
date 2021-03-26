@@ -26,7 +26,7 @@ LightGrey_Colour = (200,200,200)
 #TextWidth Dictionary contains width settings for each of the letters being used 
 textWidth =  {"A": 26, "B": 20, "C": 22, "D": 26, "E": 17, "F": 17, "G": 24, "H": 28, "I": 13, "J": 16, "K": 25, "L": 19, "M": 33, "N": 28, "O": 25, "P": 19, "Q": 27, "R": 24, "S": 14, "T": 22, "U": 25, "V": 25, "W": 34, "X": 28, "Y": 25, "Z": 20}
 #TextCentering Dictionary includes spacing to help center the text images based on their size
-textCentering = {"A": 1, "B": 2, "C": 2, "D": 0, "E": 5, "F": 6, "G": 2, "H": 0, "I": 7, "J": 7, "K": 1, "L": 4, "M": -2, "N": 0, "O": 1, "P": 5, "Q": -4, "R": 3, "S": 7, "T": 3, "U": 1, "V": 2, "W": -3, "X": 0, "Y": 1, "Z": 3}
+textCentering = {"A": 4, "B": 2, "C": 2, "D": 2, "E": 5, "F": 6, "G": 2, "H": 0, "I": 7, "J": 7, "K": 1, "L": 4, "M": 2, "N": 0, "O": 1, "P": 5, "Q": -4, "R": 3, "S": 7, "T": 3, "U": 1, "V": 2, "W": -3, "X": 0, "Y": 1, "Z": 3}
 Clock = pygame.time.Clock()
 Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 Word_List = []
@@ -208,6 +208,7 @@ class Game:
         turn = ""
         onScreenKeyBoard = "qwertyuiopasdfghjklzxcvbnm"
         Word = ""
+        PlayerWin = False
         #ammount of turns to take with each difficulty setting
        
         Easy = 16
@@ -327,7 +328,7 @@ class Game:
                     KeyLetter = ""
 
             #function used to check how many turns are left by comparing the letters guessed with the letter in the word being guessed 
-            def scoreCheck(Guesslist, Word):
+            def guessCheck(Guesslist, Word):
                 score = 0
                 for Letter in GuessList:
                     if Letter.capitalize() not in list(Word.upper()):
@@ -335,6 +336,54 @@ class Game:
                         print(score) #TODO - work on method to blit hangman on screen
                 return score
             
+            def winCheck(Guesslist, Word):
+                score = 0
+                for Letter in Word:
+                    if Letter.capitalize() in GuessList:
+                        score = score + 1
+                        print(score) #TODO - work on method to blit hangman on screen
+                if score == len(Word):
+                    print("True")
+                    return True
+
+            def guessRemaining(Number, Difficulty):
+                DisplayX_pos = 100
+                DisplayY_pos = 100
+                totalLeft = Difficulty - Number
+                if totalLeft == 16:
+                    stringToText("Sixteen guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 15:
+                    stringToText("Fifteen guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 14:
+                    stringToText("Fourteen guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 13:
+                    stringToText("Thirteen guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 12:
+                    stringToText("Twelve guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 11:
+                    stringToText("Eleven guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 10:
+                    stringToText("Ten guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 9:
+                    stringToText("Nine guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 8:
+                    stringToText("Eight guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 7:
+                    stringToText("Seven guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 6:
+                    stringToText("Six guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 5:
+                    stringToText("Five guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 4:
+                    stringToText("Four guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 3:
+                    stringToText("Three guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 2:
+                    stringToText("Two guesses remain", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                elif totalLeft == 1:
+                    stringToText("One guess remains", DisplayX_pos, DisplayY_pos, self.Game_Screen)
+                
+                    
             def displayLetter( Letter ):
                 if Letter.capitalize() == "A":
                     A.Draw(self.Game_Screen)
@@ -533,9 +582,13 @@ class Game:
                     ### CONTINUE HERE!!!!!!!!!!!!!!!!!! 
                     #TODO - create a funciton to check if all the letters have been guessed and increase score by 1                       
                     keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 450, mousePos[0], mousePos[1], click, KeyLetter)
-                    scoreCheck(GuessList , Word)
-                    if scoreCheck(GuessList , Word) >= Difficulty:
+                    
+                    guessRemaining(guessCheck(GuessList , Word), Difficulty)
+                    if guessCheck(GuessList , Word) >= Difficulty:
                         Round_Over = True
+                    elif winCheck(GuessList, Word) == True:
+                        PlayerWin = True
+                        Round_Over = True    
                     wordCenter = len(Word) *33
                     for Letter in Word:
                         Letter = Letter
@@ -564,6 +617,11 @@ class Game:
                     self.Game_Screen.fill(LightGrey_Colour)
                     outline.Draw(self.Game_Screen)
                     stringToText("Round Over", 750, 500, self.Game_Screen )
+                    if PlayerWin == True:
+                        stringToText("You Win", 750, 550, self.Game_Screen )
+                    elif PlayerWin == False:
+                        stringToText("You Lose", 750, 550, self.Game_Screen )
+
                     #display if player won or lost 
                     #display current scoreboared
                 
