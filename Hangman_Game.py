@@ -26,7 +26,8 @@ LightGrey_Colour = (200,200,200)
 #TextWidth Dictionary contains width settings for each of the letters being used 
 textWidth =  {"A": 26, "B": 20, "C": 22, "D": 26, "E": 17, "F": 17, "G": 24, "H": 28, "I": 13, "J": 16, "K": 25, "L": 19, "M": 33, "N": 28, "O": 25, "P": 19, "Q": 27, "R": 24, "S": 14, "T": 22, "U": 25, "V": 25, "W": 34, "X": 28, "Y": 25, "Z": 20}
 #TextCentering Dictionary includes spacing to help center the text images based on their size
-textCentering = {"A": 4, "B": 2, "C": 2, "D": 2, "E": 5, "F": 6, "G": 2, "H": 0, "I": 7, "J": 7, "K": 1, "L": 4, "M": 2, "N": 0, "O": 1, "P": 5, "Q": -4, "R": 3, "S": 7, "T": 3, "U": 1, "V": 2, "W": -3, "X": 0, "Y": 1, "Z": 3}
+#
+textCentering = {"A": 3, "B": 3, "C": 2, "D": 1, "E": 5, "F": 5, "G": 2, "H": 1, "I": 7, "J": 7, "K": 1, "L": 5, "M": 0, "N": 1, "O": 1, "P": 5, "Q": -4, "R": 3, "S": 5, "T": 3, "U": 2, "V": 3, "W": -3, "X": 0, "Y": 1, "Z": 3}
 Clock = pygame.time.Clock()
 Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 Word_List = []
@@ -166,7 +167,8 @@ def stringToText(string, X_pos, Y_pos, Game_Screen ):
                 counter = 0
         else:
             Game_Screen.blit(pygame.transform.scale(pygame.image.load("assets/"+Letter.capitalize()+".png"), (textWidth[Letter.capitalize()] , 21)),(X_posList[counter] + textCentering[Letter.capitalize()],Y_pos))
-            X_posList.append( X_posList[counter] + spacing - textCentering[Letter.capitalize()] )#+ textCentering[Letter.capitalize()])
+            #appends X_pos for next letter
+            X_posList.append( X_posList[counter] + spacing - textCentering[Letter.capitalize()] )# Detemines how close the folowing letter will be based on the sice of the letter it's following
             counter = counter + 1
             if counter > len(string):
                 counter = 0
@@ -625,6 +627,7 @@ class Game:
                     #display if player won or lost 
                     #display current scoreboared
                 
+#WORDSELCTION SCREEN ---------------------------------------------------------------------------------------                
                 elif ChooseWord == True:
                     
                     startingX_pos = 800
@@ -638,7 +641,8 @@ class Game:
                     
                     #create list with the list positions for words
                     #SelectionY_pos list moved to outside of gameloop, or else text won't move
-
+                    stringToText("Use the up and down keys", 25, 100, self.Game_Screen)
+                    stringToText("to scroll throught the list", 25, 150, self.Game_Screen)
                     for i in range(startingRange,endingRange):
                         if len(selectionRangeList) < endingRange - 1:
                             SelectionY_pos.append(startingY_pos)
@@ -650,7 +654,7 @@ class Game:
                         wordSpace = len(Word_List[selectionRangeList[i-1]]) * 25 - wordLength(Word_List[selectionRangeList[i-1]]) #Calculated the spaced taken up by the word on screen for centering 
                         
                         #Prints and displayed the word with a highlight when the mouse is over it 
-                        if mousePos[0] >= startingX_pos and mousePos[0] <= startingX_pos + len(Word_List[selectionRangeList[i-1]]) * 25 and mousePos[1] >= SelectionY_pos[i-1] and mousePos[1] <= SelectionY_pos[i-1] + textHeight:
+                        if mousePos[0] >= startingX_pos - wordSpace /2 and mousePos[0] <= startingX_pos + wordSpace /2 and mousePos[1] >= SelectionY_pos[i-1] -1 and mousePos[1] <= SelectionY_pos[i-1] + textHeight +1:
                             stringToText(Word_List[selectionRangeList[i-1]], startingX_pos - wordSpace /2 , SelectionY_pos[i-1], self.Game_Screen)
                             pygame.draw.rect(self.Game_Screen, (255,0,0), [startingX_pos - wordSpace /2 ,SelectionY_pos[i-1],len(Word_List[selectionRangeList[i-1]]) * 25 - wordLength(Word_List[selectionRangeList[i-1]]) ,textHeight])
                             if click == True:
@@ -679,6 +683,7 @@ class Game:
                             SelectionY_pos[i-1] = SelectionY_pos[i-1]
                             #stringToText(Word_List[i-1], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
                         
+#RandomWord Condition ---------------------------------------------------------------------------------------------                        
                 elif RandomWord == True:
                     Word = Word_List[numSelect]
                     Game_On = True
