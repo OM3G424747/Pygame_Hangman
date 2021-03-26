@@ -171,6 +171,14 @@ def stringToText(string, X_pos, Y_pos, Game_Screen ):
             if counter > len(string):
                 counter = 0
 
+def wordLength(Word):
+    Length = 0
+    for Letter in Word:
+        #check letter list and add letter together 
+        Length = Length + textCentering[Letter.capitalize()]
+        
+    return Length
+
 
 class Game:
     Tick_Rate = 60 #Change to set framerate
@@ -189,6 +197,7 @@ class Game:
         click = False
         Game_Over = False
         GameMenu = True
+        Game_On = False
         OnePlayerGame = False #sets game into a state where you play against the CPU
         TwoPlayerGame = False #sets game into a two player state where you play against another player 
         ChooseWord = False
@@ -197,16 +206,17 @@ class Game:
         letterGuessed = ""
         turn = ""
         onScreenKeyBoard = "qwertyuiopasdfghjklzxcvbnm"
+        Word = ""
 
  
-        title = GameObject("assets/Menu/Title.png", 350,100,896,110) 
-        onePlayer = GameObject("assets/Menu/singlePlayer.png", 650,600,233,34)
-        twoPlayer = GameObject("assets/Menu/2Player.png", 650,675,241,34)
-        selectWord = GameObject("assets/Menu/selectWord.png", 565,600,367,36)
-        randomWord = GameObject("assets/Menu/randomWord.png", 565,675,442,36)
+        title = GameObject("assets/Menu/Title.png", 650,100,896,110) 
+        onePlayer = GameObject("assets/Menu/singlePlayer.png", 1200,400,233,34)
+        twoPlayer = GameObject("assets/Menu/2Player.png", 1200,475,241,34)
+        selectWord = GameObject("assets/Menu/selectWord.png", 1115,400,367,36)
+        randomWord = GameObject("assets/Menu/randomWord.png", 1115,475,442,36)
         
-
-
+        outline = GameObject("assets/Hangman.png", -300,-100,1131,1601)
+        
         A = GameObject("assets/A.png", 100,100,26,21)
         B = GameObject("assets/B.png", 100,100,20,21)
         C = GameObject("assets/C.png", 100,100,22,21)
@@ -456,6 +466,7 @@ class Game:
             #ToDo - possibly add option for AI difficulty to increase     
             if GameMenu == True and OnePlayerGame == False and TwoPlayerGame == False:
                 self.Game_Screen.fill(LightGrey_Colour)
+                outline.Draw(self.Game_Screen)
                 title.Draw(self.Game_Screen)
                 onePlayer.Draw(self.Game_Screen)
                 twoPlayer.Draw(self.Game_Screen)
@@ -478,6 +489,7 @@ class Game:
 
             elif GameMenu == True and RandomWord == False and ChooseWord == False :
                 self.Game_Screen.fill(LightGrey_Colour)
+                outline.Draw(self.Game_Screen)
                 title.Draw(self.Game_Screen)
                 selectWord.Draw(self.Game_Screen)
                 randomWord.Draw(self.Game_Screen)
@@ -498,25 +510,23 @@ class Game:
             elif GameMenu == True and RandomWord == True or ChooseWord == True :
                 self.Game_Screen.fill(LightGrey_Colour)
                 
-                if RandomWord == True:
+                if GameMenu == True and Game_On == True:
 
-                    
-#TODO - Turn into a function for displaying words on screen  
 #TODO - add a function to wipe the guesslist at the start if a new round               
-                    Word = Word_List[numSelect]
+                    
                      #TODO - Capatilze word before going into guessing loop!
                     X_posList = []
                     Counter = 0
                 
                     ### CONTINUE HERE!!!!!!!!!!!!!!!!!!
-                    #TODO - Create a function to compare the guess list and the Word - Convert word into a list. Total turns = 8 (score should be determined by deducting the word unique characters from the guess list, excess characters should count towards the turns taken )
                         
                     keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 450, mousePos[0], mousePos[1], click, KeyLetter)
                     scoreCheck(GuessList , Word)
+                    wordCenter = len(Word) *33
                     for Letter in Word:
                         Letter = Letter
                         Y_pos = 400 #Yposition of where the word will be displayed
-                        X_pos = 650
+                        X_pos = 800 - wordCenter /2
                         if Counter >= 1:
                             X_posList.append(X_posList[Counter - 1] + 33)
                             changeLetterPos(Letter, X_posList[Counter], Y_pos )
@@ -537,7 +547,7 @@ class Game:
                 
                 elif ChooseWord == True:
                     
-                    startingX_pos = 650
+                    startingX_pos = 800
                     startingY_pos = -40
                     textHeight = 21
                     Counter = 0
@@ -557,13 +567,18 @@ class Game:
                         startingY_pos = startingY_pos + spaceBetweenWords
                         wordWidth = 0
                        
-                    
+                        wordSpace = len(Word_List[selectionRangeList[i-1]]) * 25 - wordLength(Word_List[selectionRangeList[i-1]]) #Calculated the spaced taken up by the word on screen for centering 
+                        
+                        #Prints and displayed the word with a highlight when the mouse is over it 
                         if mousePos[0] >= startingX_pos and mousePos[0] <= startingX_pos + len(Word_List[selectionRangeList[i-1]]) * 25 and mousePos[1] >= SelectionY_pos[i-1] and mousePos[1] <= SelectionY_pos[i-1] + textHeight:
-                            stringToText(Word_List[selectionRangeList[i-1]], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
-                            pygame.draw.rect(self.Game_Screen, (255,0,0), [startingX_pos,SelectionY_pos[i-1],len(Word_List[selectionRangeList[i-1]]) * 25,20])
-                            #TODO - add a function to caculatee the average length of a word being printed - feed into Y pos hitbox    
-                        else:
-                            stringToText(Word_List[selectionRangeList[i-1]], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
+                            stringToText(Word_List[selectionRangeList[i-1]], startingX_pos - wordSpace /2 , SelectionY_pos[i-1], self.Game_Screen)
+                            pygame.draw.rect(self.Game_Screen, (255,0,0), [startingX_pos - wordSpace /2 ,SelectionY_pos[i-1],len(Word_List[selectionRangeList[i-1]]) * 25 - wordLength(Word_List[selectionRangeList[i-1]]) ,textHeight])
+                            if click == True:
+                                Word = Word_List[selectionRangeList[i-1]]
+                                Game_On = True  
+                        #Prints test when the mouse isn't hovering over it 
+                        else: 
+                            stringToText(Word_List[selectionRangeList[i-1]], startingX_pos - wordSpace /2, SelectionY_pos[i-1], self.Game_Screen)
 
                         if keys[pygame.K_DOWN] == True:
                             #use list of numbers to blit a different word onto the screan, and increase those numbers as the screen scrolls down 
@@ -584,7 +599,11 @@ class Game:
                             SelectionY_pos[i-1] = SelectionY_pos[i-1]
                             #stringToText(Word_List[i-1], startingX_pos, SelectionY_pos[i-1], self.Game_Screen)
                         
-                    
+                elif RandomWord == True:
+                    Word = Word_List[numSelect]
+                    Game_On = True
+
+                        
                         
 
                         
