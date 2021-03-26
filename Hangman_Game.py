@@ -23,6 +23,9 @@ Green_Colour = (0,255,0)
 Blue_Colour = (0,0,255)
 Grey_Colour = (100,100,100)
 LightGrey_Colour = (200,200,200)
+defaultButtonColour = (250,250,250)
+highlightButtonColour = (100,250,250)
+buttonShadowColour = (100,100,100)
 #TextWidth Dictionary contains width settings for each of the letters being used 
 textWidth =  {"A": 26, "B": 20, "C": 22, "D": 26, "E": 17, "F": 17, "G": 24, "H": 28, "I": 13, "J": 16, "K": 25, "L": 19, "M": 33, "N": 28, "O": 25, "P": 19, "Q": 27, "R": 24, "S": 14, "T": 22, "U": 25, "V": 25, "W": 34, "X": 28, "Y": 25, "Z": 20}
 #TextCentering Dictionary includes spacing to help center the text images based on their size
@@ -76,9 +79,6 @@ class keyselection:
         self.keyBoardLetters = keyBoardLetters
         buttonShadowSize = 5
         letterX_pos = 0
-        defaultButtonColour = (250,250,250)
-        highlightButtonColour = (100,250,250)
-        buttonShadowColour = (100,100,100)
         numberOfRows = 0
         
        
@@ -655,11 +655,14 @@ class Game:
                         
                         #Prints and displayed the word with a highlight when the mouse is over it 
                         if mousePos[0] >= startingX_pos - wordSpace /2 and mousePos[0] <= startingX_pos + wordSpace /2 and mousePos[1] >= SelectionY_pos[i-1] -1 and mousePos[1] <= SelectionY_pos[i-1] + textHeight +1:
+                            pygame.draw.rect(self.Game_Screen, buttonShadowColour, [startingX_pos - wordSpace /2 - 2,SelectionY_pos[i-1] - 2,len(Word_List[selectionRangeList[i-1]]) * 25 - wordLength(Word_List[selectionRangeList[i-1]]) + 9 ,textHeight +9])
+                            pygame.draw.rect(self.Game_Screen, defaultButtonColour, [startingX_pos - wordSpace /2 - 2 ,SelectionY_pos[i-1] - 2,len(Word_List[selectionRangeList[i-1]]) * 25 - wordLength(Word_List[selectionRangeList[i-1]])+4 ,textHeight +4])
                             stringToText(Word_List[selectionRangeList[i-1]], startingX_pos - wordSpace /2 , SelectionY_pos[i-1], self.Game_Screen)
-                            pygame.draw.rect(self.Game_Screen, (255,0,0), [startingX_pos - wordSpace /2 ,SelectionY_pos[i-1],len(Word_List[selectionRangeList[i-1]]) * 25 - wordLength(Word_List[selectionRangeList[i-1]]) ,textHeight])
+                            
                             if click == True:
                                 Word = Word_List[selectionRangeList[i-1]]
                                 Game_On = True  
+                                click = False
                         #Prints test when the mouse isn't hovering over it 
                         else: 
                             stringToText(Word_List[selectionRangeList[i-1]], startingX_pos - wordSpace /2, SelectionY_pos[i-1], self.Game_Screen)
@@ -688,16 +691,7 @@ class Game:
                     Word = Word_List[numSelect]
                     Game_On = True
 
-                        
-                        
-
-                        
-                
-                       
-
-
-
-               
+                                   
                 #add if statement for if ChooseWord == True
                 #if ChooseWord == True, display a list of words, ask other player to look away 
 
