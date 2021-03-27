@@ -46,6 +46,8 @@ GuessList = []
 #lists used for word selection list 
 SelectionY_pos = [] #Yposition for word selection - Placed outside of gameloop to make text move
 selectionRangeList = []
+CountDownTimer = 300
+#TODO - create a "loading bar" for next round/ next screens 
 
 
 class GameObject: #class for defining game objects that will be drawn onto the game screen and moved arround
@@ -228,34 +230,6 @@ class Game:
         
         outline = GameObject("assets/Hangman.png", -300,-100,1131,1601)
         
-        A = GameObject("assets/A.png", 100,100,26,21)
-        B = GameObject("assets/B.png", 100,100,20,21)
-        C = GameObject("assets/C.png", 100,100,22,21)
-        D = GameObject("assets/D.png", 100,100,26,21)
-        E = GameObject("assets/E.png", 100,100,17,21)
-        F = GameObject("assets/F.png", 100,100,17,21)
-        G = GameObject("assets/G.png", 100,100,24,22)
-        H = GameObject("assets/H.png", 100,100,28,21)
-        I = GameObject("assets/I.png", 100,100,13,21)
-        J = GameObject("assets/J.png", 100,100,16,21)
-        K = GameObject("assets/K.png", 100,100,25,21)
-        L = GameObject("assets/L.png", 100,100,19,21)
-        M = GameObject("assets/M.png", 100,100,33,21)
-        N = GameObject("assets/N.png", 100,100,28,21)
-        O = GameObject("assets/O.png", 100,100,25,21)
-        P = GameObject("assets/P.png", 100,100,19,21)
-        Q = GameObject("assets/Q.png", 100,100,27,21)
-        R = GameObject("assets/R.png", 100,100,24,21)
-        S = GameObject("assets/S.png", 100,100,14,21)
-        T = GameObject("assets/T.png", 100,100,22,22)
-        U = GameObject("assets/U.png", 100,100,25,21)
-        V = GameObject("assets/V.png", 100,100,25,21)
-        W = GameObject("assets/W.png", 100,100,34,21)
-        X = GameObject("assets/X.png", 100,100,28,21)
-        Y = GameObject("assets/Y.png", 100,100,25,21)
-        Z = GameObject("assets/Z.png", 100,100,20,22)
-        
-
 
         while Game_Over == False:
             for event in pygame.event.get():
@@ -385,141 +359,6 @@ class Game:
                 elif totalLeft == 1:
                     stringToText("One guess remains", DisplayX_pos, DisplayY_pos, self.Game_Screen)
                 
-                    
-            def displayLetter( Letter ):
-                if Letter.capitalize() == "A":
-                    A.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "B":
-                    B.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "C":
-                    C.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "D":
-                    D.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "E":
-                    E.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "F":
-                    F.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "G":
-                    G.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "H":
-                    H.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "I":
-                    I.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "J":
-                    J.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "K":
-                    K.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "L":
-                    L.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "M":
-                    M.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "N":
-                    N.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "O":
-                    O.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "P":
-                    P.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "Q":
-                    Q.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "R":
-                    R.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "S":
-                    S.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "T":
-                    T.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "U":
-                    U.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "V":
-                    V.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "W":
-                    W.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "X":
-                    X.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "Y":
-                    Y.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "Z":
-                    Z.Draw(self.Game_Screen)
-                
-            def changeLetterPos(Letter, newX_pos, newY_pos ):
-                
-                if Letter.capitalize() == "A":
-                    A.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    A.Y_pos = newY_pos
-                elif Letter.capitalize() == "B":
-                    B.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    B.Y_pos = newY_pos
-                elif Letter.capitalize() == "C":
-                    C.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    C.Y_pos = newY_pos
-                elif Letter.capitalize() == "D":
-                    D.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    D.Y_pos = newY_pos
-                elif Letter.capitalize() == "E":
-                    E.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    E.Y_pos = newY_pos
-                elif Letter.capitalize() == "F":
-                    F.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    F.Y_pos = newY_pos
-                elif Letter.capitalize() == "G":
-                    G.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    G.Y_pos = newY_pos
-                elif Letter.capitalize() == "H":
-                    H.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    H.Y_pos = newY_pos
-                elif Letter.capitalize() == "I":
-                    I.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    I.Y_pos = newY_pos
-                elif Letter.capitalize() == "J":
-                    J.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    J.Y_pos = newY_pos
-                elif Letter.capitalize() == "K":
-                    K.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    K.Y_pos = newY_pos
-                elif Letter.capitalize() == "L":
-                    L.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    L.Y_pos = newY_pos
-                elif Letter.capitalize() == "M":
-                    M.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    M.Y_pos = newY_pos
-                elif Letter.capitalize() == "N":
-                    N.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    N.Y_pos = newY_pos
-                elif Letter.capitalize() == "O":
-                    O.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    O.Y_pos = newY_pos
-                elif Letter.capitalize() == "P":
-                    P.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    P.Y_pos = newY_pos
-                elif Letter.capitalize() == "Q":
-                    Q.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    Q.Y_pos = newY_pos
-                elif Letter.capitalize() == "R":
-                    R.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    R.Y_pos = newY_pos
-                elif Letter.capitalize() == "S":
-                    S.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    S.Y_pos = newY_pos
-                elif Letter.capitalize() == "T":
-                    T.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    T.Y_pos = newY_pos
-                elif Letter.capitalize() == "U":
-                    U.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    U.Y_pos = newY_pos
-                elif Letter.capitalize() == "V":
-                    V.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    V.Y_pos = newY_pos
-                elif Letter.capitalize() == "W":
-                    W.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    W.Y_pos = newY_pos
-                elif Letter.capitalize() == "X":
-                    X.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    X.Y_pos = newY_pos
-                elif Letter.capitalize() == "Y":
-                    Y.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    Y.Y_pos = newY_pos
-                elif Letter.capitalize() == "Z":
-                    Z.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    Z.Y_pos = newY_pos
 
 
             #ToDo - possibly add option for AI difficulty to increase     
@@ -598,9 +437,8 @@ class Game:
                         X_pos = 800 - wordCenter /2
                         if Counter >= 1:
                             X_posList.append(X_posList[Counter - 1] + 33)
-                            changeLetterPos(Letter, X_posList[Counter], Y_pos )
                             if Letter.capitalize() in GuessList:
-                                displayLetter(Letter)
+                                stringToText(Letter, X_posList[Counter], Y_pos, self.Game_Screen)
                             pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
                             Counter = Counter + 1
                             if Counter == len(Word):
@@ -608,9 +446,8 @@ class Game:
                                 
                         elif Counter == 0:
                             X_posList.append(X_pos) # set starting postion of first letter 
-                            changeLetterPos(Letter ,X_posList[Counter], Y_pos)
                             if Letter.capitalize() in GuessList:
-                                displayLetter(Letter)
+                                stringToText(Letter, X_posList[Counter], Y_pos, self.Game_Screen)
                             pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
                             Counter = Counter + 1
                 
@@ -708,3 +545,174 @@ new_game.run_game_loop() #Starts the game loop as defined in the class to contin
 
 pygame.quit()
 quit()
+
+
+
+#TEXT ACRHIVE!!!!
+#DELETE IF NOT NEEDED!!!
+
+"""         
+        A = GameObject("assets/A.png", 100,100,26,21)
+        B = GameObject("assets/B.png", 100,100,20,21)
+        C = GameObject("assets/C.png", 100,100,22,21)
+        D = GameObject("assets/D.png", 100,100,26,21)
+        E = GameObject("assets/E.png", 100,100,17,21)
+        F = GameObject("assets/F.png", 100,100,17,21)
+        G = GameObject("assets/G.png", 100,100,24,22)
+        H = GameObject("assets/H.png", 100,100,28,21)
+        I = GameObject("assets/I.png", 100,100,13,21)
+        J = GameObject("assets/J.png", 100,100,16,21)
+        K = GameObject("assets/K.png", 100,100,25,21)
+        L = GameObject("assets/L.png", 100,100,19,21)
+        M = GameObject("assets/M.png", 100,100,33,21)
+        N = GameObject("assets/N.png", 100,100,28,21)
+        O = GameObject("assets/O.png", 100,100,25,21)
+        P = GameObject("assets/P.png", 100,100,19,21)
+        Q = GameObject("assets/Q.png", 100,100,27,21)
+        R = GameObject("assets/R.png", 100,100,24,21)
+        S = GameObject("assets/S.png", 100,100,14,21)
+        T = GameObject("assets/T.png", 100,100,22,22)
+        U = GameObject("assets/U.png", 100,100,25,21)
+        V = GameObject("assets/V.png", 100,100,25,21)
+        W = GameObject("assets/W.png", 100,100,34,21)
+        X = GameObject("assets/X.png", 100,100,28,21)
+        Y = GameObject("assets/Y.png", 100,100,25,21)
+        Z = GameObject("assets/Z.png", 100,100,20,22)
+            
+            
+            def displayLetter( Letter ):
+                if Letter.capitalize() == "A":
+                    A.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "B":
+                    B.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "C":
+                    C.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "D":
+                    D.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "E":
+                    E.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "F":
+                    F.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "G":
+                    G.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "H":
+                    H.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "I":
+                    I.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "J":
+                    J.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "K":
+                    K.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "L":
+                    L.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "M":
+                    M.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "N":
+                    N.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "O":
+                    O.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "P":
+                    P.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "Q":
+                    Q.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "R":
+                    R.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "S":
+                    S.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "T":
+                    T.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "U":
+                    U.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "V":
+                    V.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "W":
+                    W.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "X":
+                    X.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "Y":
+                    Y.Draw(self.Game_Screen)
+                elif Letter.capitalize() == "Z":
+                    Z.Draw(self.Game_Screen)
+                
+           
+            def changeLetterPos(Letter, newX_pos, newY_pos ):
+                
+                if Letter.capitalize() == "A":
+                    A.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    A.Y_pos = newY_pos
+                elif Letter.capitalize() == "B":
+                    B.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    B.Y_pos = newY_pos
+                elif Letter.capitalize() == "C":
+                    C.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    C.Y_pos = newY_pos
+                elif Letter.capitalize() == "D":
+                    D.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    D.Y_pos = newY_pos
+                elif Letter.capitalize() == "E":
+                    E.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    E.Y_pos = newY_pos
+                elif Letter.capitalize() == "F":
+                    F.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    F.Y_pos = newY_pos
+                elif Letter.capitalize() == "G":
+                    G.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    G.Y_pos = newY_pos
+                elif Letter.capitalize() == "H":
+                    H.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    H.Y_pos = newY_pos
+                elif Letter.capitalize() == "I":
+                    I.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    I.Y_pos = newY_pos
+                elif Letter.capitalize() == "J":
+                    J.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    J.Y_pos = newY_pos
+                elif Letter.capitalize() == "K":
+                    K.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    K.Y_pos = newY_pos
+                elif Letter.capitalize() == "L":
+                    L.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    L.Y_pos = newY_pos
+                elif Letter.capitalize() == "M":
+                    M.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    M.Y_pos = newY_pos
+                elif Letter.capitalize() == "N":
+                    N.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    N.Y_pos = newY_pos
+                elif Letter.capitalize() == "O":
+                    O.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    O.Y_pos = newY_pos
+                elif Letter.capitalize() == "P":
+                    P.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    P.Y_pos = newY_pos
+                elif Letter.capitalize() == "Q":
+                    Q.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    Q.Y_pos = newY_pos
+                elif Letter.capitalize() == "R":
+                    R.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    R.Y_pos = newY_pos
+                elif Letter.capitalize() == "S":
+                    S.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    S.Y_pos = newY_pos
+                elif Letter.capitalize() == "T":
+                    T.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    T.Y_pos = newY_pos
+                elif Letter.capitalize() == "U":
+                    U.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    U.Y_pos = newY_pos
+                elif Letter.capitalize() == "V":
+                    V.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    V.Y_pos = newY_pos
+                elif Letter.capitalize() == "W":
+                    W.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    W.Y_pos = newY_pos
+                elif Letter.capitalize() == "X":
+                    X.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    X.Y_pos = newY_pos
+                elif Letter.capitalize() == "Y":
+                    Y.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    Y.Y_pos = newY_pos
+                elif Letter.capitalize() == "Z":
+                    Z.X_pos = newX_pos + textCentering[Letter.capitalize()]
+                    Z.Y_pos = newY_pos
+"""
