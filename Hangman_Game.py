@@ -195,7 +195,7 @@ class delay:
                 
     
     def draw(self):
-        
+        #TODO - Add opption to skip if space is pressed 
         if self.timer < self.CountDown:
             if self.CountDown >= 200:
                 stringToText("starting in three", self.TimerX_pos, self.TimerY_pos, self.Game_Screen )
