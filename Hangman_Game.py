@@ -30,7 +30,7 @@ buttonShadowColour = (100,100,100)
 textWidth =  {"A": 26, "B": 20, "C": 22, "D": 26, "E": 17, "F": 17, "G": 24, "H": 28, "I": 13, "J": 16, "K": 25, "L": 19, "M": 33, "N": 28, "O": 25, "P": 19, "Q": 27, "R": 24, "S": 14, "T": 22, "U": 25, "V": 25, "W": 34, "X": 28, "Y": 25, "Z": 20}
 #TextCentering Dictionary includes spacing to help center the text images based on their size
 #
-textCentering = {"A": 3, "B": 3, "C": 2, "D": 1, "E": 5, "F": 5, "G": 2, "H": 1, "I": 7, "J": 7, "K": 1, "L": 5, "M": 0, "N": 1, "O": 1, "P": 5, "Q": -4, "R": 3, "S": 5, "T": 3, "U": 2, "V": 3, "W": -3, "X": 0, "Y": 1, "Z": 3}
+textCentering = {"A": 3, "B": 3, "C": 2, "D": 1, "E": 5, "F": 5, "G": 2, "H": 1, "I": 7, "J": 7, "K": 1, "L": 5, "M": 0, "N": 1, "O": 1, "P": 5, "Q": 0, "R": 3, "S": 5, "T": 3, "U": 2, "V": 3, "W": -3, "X": 0, "Y": 1, "Z": 3}
 Clock = pygame.time.Clock()
 Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 Word_List = []
@@ -47,6 +47,7 @@ SelectionY_pos = [] #Yposition for word selection - Placed outside of gameloop t
 selectionRangeList = []
 CountDownTimer = 300
 #TODO - create a "loading bar" for next round/ next screens 
+
 
 
 class GameObject: #class for defining game objects that will be drawn onto the game screen and moved arround
@@ -188,15 +189,19 @@ class delay:
         self.Game_Screen = Game_Screen
         self.CountDown = CountDown
         self.timer = 0
-        self.TimerX_pos = 1000
+        self.TimerX_pos = 900
         self.TimerY_pos = 700
         self.timerSpeed = 1 #increase to shorten timer countdown
         self.zero = False
                 
     
-    def draw(self):
+    def draw(self, enterKey):
         #TODO - Add opption to skip if space is pressed 
-        if self.timer < self.CountDown:
+        stringToText("Press Enter to Skip Countdown", self.TimerX_pos, self.TimerY_pos + 25, self.Game_Screen )
+        if enterKey == 1:
+            self.CountDown = 0
+
+        elif self.timer < self.CountDown:
             if self.CountDown >= 200:
                 stringToText("starting in three", self.TimerX_pos, self.TimerY_pos, self.Game_Screen )
                 self.CountDown = self.CountDown - self.timerSpeed
@@ -332,6 +337,11 @@ class Game:
                     KeyLetter = "Z"
                 else:
                     KeyLetter = ""
+            def boxOutline(X_pos, Y_pos, Length, Width): #Function to blit a box outline arround important text for style 
+                ShadowSize = 10
+                pygame.draw.rect(self.Game_Screen, buttonShadowColour, [X_pos, Y_pos, Length + ShadowSize, Width + ShadowSize])
+                pygame.draw.rect(self.Game_Screen, defaultButtonColour, [X_pos, Y_pos, Length , Width ])
+
 
             #function used to check how many turns are left by comparing the letters guessed with the letter in the word being guessed 
             def guessCheck(Guesslist, Word):
@@ -406,6 +416,8 @@ class Game:
                     return "CPU"
                 elif ActivePlayer != "Player1":
                     return "Player1"
+
+            
         
                 
             #ToDo - possibly add option for AI difficulty to increase     
@@ -519,11 +531,12 @@ class Game:
                 #display when the round is over and max number of tries have been reached 
                 elif GameMenu == True and Round_Over == True: 
                     self.Game_Screen.fill(LightGrey_Colour)
-                    winOutline.Draw(self.Game_Screen)
+                    winOutline.Draw(self.Game_Screen) #Blits an image of an empty gallows 
+                    boxOutline(745, 495, 245, 85)
                     stringToText("Round Over", 750, 500, self.Game_Screen )
                     if PlayerWin == True:
                         stringToText("You Win", 750, 550, self.Game_Screen )
-                        timer.draw()
+                        timer.draw(keys[pygame.K_RETURN])
                         
                         if timer.CountDown <= 10:
                             print("YAY!")
@@ -533,12 +546,21 @@ class Game:
                                 print("Condition MET")
                                 if ActivePlayer == "Player1":
                                     Player1Score = Player1Score + 1
+                                    ActivePlayer = turnChange(OnePlayerGame, ActivePlayer)
                                     print(Player1Score)
                                 elif ActivePlayer != "Player1":
                                     Player2Score = Player2Score +1
+                                    ActivePlayer = turnChange(OnePlayerGame, ActivePlayer)
                                     print(Player2Score)
-                                ActivePlayer = turnChange(OnePlayerGame, ActivePlayer) #update to display the next player 
+                                
+                                 #update to display the next player 
+                                print(ActivePlayer)
                                 GuessList.clear()
+                                if ChooseWord == True:
+                                    ActivePlayer = turnChange(OnePlayerGame, ActivePlayer) #changes active player back again so the last player gets a turn to choose a word
+                                elif RandomWord == True:
+                                    Word = Word_List[numSelect]
+                                Game_On = False
                                 Round_Over = False
                                 print(Round_Over)
                             
@@ -562,7 +584,7 @@ class Game:
                     #display current scoreboared
                 
 #WORDSELCTION SCREEN ---------------------------------------------------------------------------------------                
-                elif ChooseWord == True:
+                elif ChooseWord == True and Game_On == False:
                     
                     startingX_pos = 800
                     startingY_pos = -40
@@ -575,6 +597,7 @@ class Game:
                     
                     #create list with the list positions for words
                     #SelectionY_pos list moved to outside of gameloop, or else text won't move
+                    boxOutline(20, 95, 615, 85) #Blits a box outline
                     stringToText("Use the up and down keys", 25, 100, self.Game_Screen)
                     stringToText("to scroll throught the list", 25, 150, self.Game_Screen)
                     for i in range(startingRange,endingRange):
