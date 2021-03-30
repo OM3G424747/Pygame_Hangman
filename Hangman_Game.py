@@ -204,26 +204,34 @@ class delay:
         self.TimerY_pos = 700
         self.timerSpeed = 1 #increase to shorten timer countdown
         self.zero = False
+        self.CPU = False
+        self.statusString = "Press Enter to Skip Countdown"
+        self.actionType = "starting"
                 
     
     def draw(self, enterKey):
+        if self.CPU == True:
+            self.statusString = "Press Enter to Skip selection"
+            self.actionType = "CPU selecting"
+
         pygame.draw.rect(self.Game_Screen, buttonShadowColour, [self.TimerX_pos - 10, self.TimerY_pos -10, 675 + 10, 65 + 10])
         pygame.draw.rect(self.Game_Screen, defaultButtonColour, [self.TimerX_pos - 10, self.TimerY_pos -10, 675 , 65 ])
-        stringToText("Press Enter to Skip Countdown", self.TimerX_pos, self.TimerY_pos + 25, self.Game_Screen )
+        stringToText(self.statusString, self.TimerX_pos, self.TimerY_pos + 25, self.Game_Screen )
         if enterKey == 1:
             self.CountDown = 0
+            enterKey = 0
 
         elif self.timer < self.CountDown:
             if self.CountDown >= 200:
-                stringToText(f"starting in {self.CountDown}", self.TimerX_pos, self.TimerY_pos, self.Game_Screen )
+                stringToText(f"{self.actionType} in {self.CountDown}", self.TimerX_pos, self.TimerY_pos, self.Game_Screen )
                 self.CountDown = self.CountDown - self.timerSpeed
                  
             elif self.CountDown >= 100:
-                stringToText(f"starting in {self.CountDown}", self.TimerX_pos, self.TimerY_pos, self.Game_Screen )
+                stringToText(f"{self.actionType} in {self.CountDown}", self.TimerX_pos, self.TimerY_pos, self.Game_Screen )
                 self.CountDown = self.CountDown - self.timerSpeed
                 
             elif self.CountDown >= 1:
-                stringToText(f"starting in {self.CountDown}", self.TimerX_pos, self.TimerY_pos, self.Game_Screen )
+                stringToText(f"{self.actionType} in {self.CountDown}", self.TimerX_pos, self.TimerY_pos, self.Game_Screen )
                 self.CountDown = self.CountDown - self.timerSpeed
                 
 
@@ -277,6 +285,7 @@ class Game:
         CPUdelay = delay(CountDownTimer, self.Game_Screen)
         CPUdelay.CountDown = 100
         CPUdelay.TimerY_pos = 100
+        CPUdelay.CPU = True
         outline = GameObject("assets/Hangman.png", -300,-100,1131,1601)
         winOutline = GameObject("assets/HangmanWin.png", -300,-100,1131,1601)
         
@@ -530,7 +539,6 @@ class Game:
                         click = False
                         
                         
-
                 #add if statement for if ChooseWord == True
                 #if ChooseWord == True, display a list of words
 
@@ -538,14 +546,12 @@ class Game:
                 self.Game_Screen.fill(LightGrey_Colour)
                 
 #Main GameLoop ----------------------------------------------------------------------------------------------------------------------------------------------
-                if GameMenu == True and Game_On == True and Round_Over == False:
-#TODO - add a function to wipe the guesslist at the start if a new round                   
+                if GameMenu == True and Game_On == True and Round_Over == False:                   
 
                     X_posList = []
                     timer.CountDown = CountDownTimer
                     Counter = 0
-                    ### CONTINUE HERE!!!!!!!!!!!!!!!!!! 
-                    #TODO - create a funciton to check if all the letters have been guessed and increase score by 1                       
+                    ### CONTINUE HERE!!!!!!!!!!!!!!!!!!                     
                     #Displayes actove player in the top center of the screen 
                     if ActivePlayer == "Player 1" or ActivePlayer == "Player 2":
                         boxOutline(645,20, 415,35)
@@ -555,14 +561,12 @@ class Game:
                         boxOutline(645,20, 205,35)
                         stringToText("CPU Turn", 650, 25, self.Game_Screen )
                         
-                       
-                    
-                    
                     guessRemaining(guessCheck(GuessList , Word), Difficulty)
                     
                     if ActivePlayer == "CPU":
                         CPULetter = ""
                         CPUclick = False
+                        #changes keyboard variable to disable player input 
                         keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 450, 0, 0, CPUclick, CPULetter)
                         CPUskill = 4 #Higher number results in a harder opponent 
                         if Difficulty == Easy:
@@ -584,12 +588,11 @@ class Game:
                             print(Word[letterToSelect].capitalize())
                             if Word[letterToSelect].capitalize() not in GuessList:
                                 GuessList.append(Word[letterToSelect].capitalize())
-                                CPUdelay.CountDown = 100
+                                CPUdelay.CountDown = 50
                                 print(GuessList)
                             else:
                                 letterToSelect = random.randint(0, len(Word)-1)
                                 
-                        
                         elif CPUguess <= 25 and CPUdelay.zero == True: 
                             CPUguess = random.randint(1,len(onScreenKeyBoard)-1)
                             letterToSelect = random.randint(0, len(onScreenKeyBoard)-1)
@@ -608,11 +611,12 @@ class Game:
                         
 
 
-                    elif ActivePlayer == "Player 1" or ActivePlayer == "Player 2":
+                    elif ActivePlayer == "Player 1" or ActivePlayer == "Player 2": #changes keyboard Variable to accept player input 
                         keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 450, mousePos[0], mousePos[1], click, KeyLetter)
                     
                     #Conditions check if the game is won
                     if guessCheck(GuessList , Word) >= Difficulty:
+                        PlayerWin = False
                         Round_Over = True
                     elif winCheck(GuessList, Word) == True:
                         if ActivePlayer == "Player 1":
@@ -625,93 +629,71 @@ class Game:
                             Round_Over = True    
                     wordCenter = len(Word) *33
                     
+                    #for loop to display the word to be guessed 
                     for Letter in Word:
-                            Letter = Letter
-                            Y_pos = 400 #Yposition of where the word will be displayed
-                            X_pos = 800 - wordCenter /2
-                            if Counter >= 1:
-                                X_posList.append(X_posList[Counter - 1] + 33)
-                                if Letter.capitalize() in GuessList:
-                                    stringToText(Letter, X_posList[Counter], Y_pos, self.Game_Screen)
-                                pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
-                                Counter = Counter + 1
-                                if Counter == len(Word):
-                                    Counter = 0
+                        Letter = Letter
+                        Y_pos = 400 #Yposition of where the word will be displayed
+                        X_pos = 800 - wordCenter /2
+                        if Counter >= 1:
+                            X_posList.append(X_posList[Counter - 1] + 33)
+                            if Letter.capitalize() in GuessList:
+                                stringToText(Letter, X_posList[Counter], Y_pos, self.Game_Screen)
+                            pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
+                            Counter = Counter + 1
+                            if Counter == len(Word):
+                                Counter = 0
                                     
-                            elif Counter == 0:
-                                X_posList.append(X_pos) # set starting postion of first letter 
-                                if Letter.capitalize() in GuessList:
-                                    stringToText(Letter, X_posList[Counter], Y_pos, self.Game_Screen)
-                                pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
-                                Counter = Counter + 1
+                        elif Counter == 0:
+                            X_posList.append(X_pos) # set starting postion of first letter 
+                            if Letter.capitalize() in GuessList:
+                                stringToText(Letter, X_posList[Counter], Y_pos, self.Game_Screen)
+                            pygame.draw.rect(self.Game_Screen, (123,101,21), [X_posList[Counter],Y_pos + 25,27,4]) #sets surface, colour and X-pos,Y-pos+size for the rectangle to be drawn
+                            Counter = Counter + 1
 
                     
 
-                        
-                
 #PostRound - Scoreboard -----------------------------------------------------------------------------------------------------------------------------------------------                
                 #display when the round is over and max number of tries have been reached 
                 elif GameMenu == True and Round_Over == True: 
                     self.Game_Screen.fill(LightGrey_Colour)
+                    
                     if PlayerWin == True: 
 
                         winOutline.Draw(self.Game_Screen) #Blits an image of an empty gallows
                         boxOutline(595, 395, 245, 85)
-                        stringToText("Round Over", 600, 400, self.Game_Screen )
+                        stringToText("Round Won", 600, 400, self.Game_Screen )
                         boxOutline(595, 440, len(f"{ActivePlayer} -You Win -{Word} is correct") *21 -20, 40)
                         stringToText(f"{ActivePlayer} Wins -{Word} is correct", 600, 450, self.Game_Screen ) 
-                        #TODO - add a scoreboard and a message that displays Correct, "insert word" was the right word!
-                        scoreBoard(900, 100, OnePlayerGame, ActivePlayer, Player1Score, Player2Score)
-                        timer.draw(keys[pygame.K_RETURN])
-                        if timer.CountDown <= 10:
-                            print("YAY!")
-                            timer.zero = True
-                
-                            if timer.zero == True:
-                                print("Condition MET")
-                                ActivePlayer = turnChange(OnePlayerGame, ActivePlayer)
-                                #update to display the next player 
-                                print(ActivePlayer)
-                                GuessList.clear()
-                                if ChooseWord == True:
-                                    ActivePlayer = turnChange(OnePlayerGame, ActivePlayer) #changes active player back again so the last player gets a turn to choose a word
-                                elif RandomWord == True:
-                                    numSelect = random.randint(0,len(Word_List))
-                                    Word = Word_List[numSelect]
-                                CPUdelay.CountDown = 500
-                                Game_On = False
-                                Round_Over = False
-                                print(Round_Over)
-                         
                     elif PlayerWin == False:
                         outline.Draw(self.Game_Screen) #Blits an image of an empty gallows
-                        boxOutline(895, 395, 245, 85)
-                        stringToText("Round Over", 900, 400, self.Game_Screen )
-                        stringToText(f"{ActivePlayer} Loses", 900, 450, self.Game_Screen )
-                        scoreBoard(900, 100, OnePlayerGame, ActivePlayer, Player1Score, Player2Score)
-
-                        timer.draw(keys[pygame.K_RETURN])
-                        if timer.CountDown <= 10:
-                            print("YAY!")
-                            timer.zero = True
-                            if timer.zero == True:
-                                print("Condition MET")
-                                ActivePlayer = turnChange(OnePlayerGame, ActivePlayer) #update to display the next player 
-                                GuessList.clear()
-                                if ChooseWord == True:
-                                    ActivePlayer = turnChange(OnePlayerGame, ActivePlayer) #changes active player back again so the last player gets a turn to choose a word
-                                elif RandomWord == True:
-                                    numSelect = random.randint(0,len(Word_List))
-                                    Word = Word_List[numSelect]
-                                CPUdelay.CountDown = 500
-                                Game_On = False
-                                Round_Over = False
-                                print(Round_Over)
-                            
-
-                    #display if player won or lost 
-                    #display current scoreboared
+                        boxOutline(595, 395, 245, 85)
+                        stringToText("Round Lost", 600, 400, self.Game_Screen )
+                        boxOutline(595, 440, len(f"{ActivePlayer} -You Win -{Word} is correct") *22 +5, 40)
+                        stringToText(f"{ActivePlayer} Loses -{Word} was correct", 600, 450, self.Game_Screen )
+                        
+                    scoreBoard(900, 100, OnePlayerGame, ActivePlayer, Player1Score, Player2Score)
+                    timer.draw(keys[pygame.K_RETURN])
+                    if timer.CountDown <= 10:
+                        print("YAY!")
+                        timer.zero = True
                 
+                        if timer.zero == True:
+                            print("Condition MET")
+                            ActivePlayer = turnChange(OnePlayerGame, ActivePlayer)
+                            #update to display the next player 
+                            print(ActivePlayer)
+                            GuessList.clear()
+                            if ChooseWord == True:
+                                ActivePlayer = turnChange(OnePlayerGame, ActivePlayer) #changes active player back again so the last player gets a turn to choose a word
+                            elif RandomWord == True:
+                                numSelect = random.randint(0,len(Word_List))
+                                Word = Word_List[numSelect]
+                            CPUdelay.CountDown = 500
+                            Game_On = False
+                            Round_Over = False
+                            print(Round_Over)
+
+                        
 #WORDSELCTION SCREEN ---------------------------------------------------------------------------------------                
                 elif ChooseWord == True and Game_On == False:
                     
@@ -732,7 +714,9 @@ class Game:
                         stringToText("Use the up and down keys", 25, 100, self.Game_Screen)
                         stringToText("to scroll throught the list", 25, 150, self.Game_Screen)
                     elif ActivePlayer == "CPU":
+                        boxOutline(20, 95, 615, 35)
                         stringToText("CPU is selecting a word", 25, 100, self.Game_Screen)
+                        
                    
                     for i in range(startingRange,endingRange):
                         if len(selectionRangeList) < endingRange - 1:
@@ -758,19 +742,18 @@ class Game:
                                     click = False
                         #Prints test when the mouse isn't hovering over it 
                         
+                        else:
+                            if ActivePlayer == "Player 1" or ActivePlayer == "Player 2": 
+                                stringToText(Word_List[selectionRangeList[i-1]], startingX_pos - wordSpace /2, SelectionY_pos[i-1], self.Game_Screen)
 
-
-                        else: 
-                            stringToText(Word_List[selectionRangeList[i-1]], startingX_pos - wordSpace /2, SelectionY_pos[i-1], self.Game_Screen)
-
-                        if keys[pygame.K_DOWN] == True:
+                        if keys[pygame.K_DOWN] == True and ActivePlayer != "CPU":
                             #use list of numbers to blit a different word onto the screan, and increase those numbers as the screen scrolls down 
                             SelectionY_pos[i-1] = SelectionY_pos[i-1] + scrollSpeed
                             if SelectionY_pos[i-1] >= Screen_Height + spaceBetweenWords :
                                 selectionRangeList[i-1] = selectionRangeList[i-1] - endingRange 
                                 SelectionY_pos[i-1] = 0 - spaceBetweenWords
 
-                        elif keys[pygame.K_UP] == True: #continue Here - add a selection to increment the list 
+                        elif keys[pygame.K_UP] == True and ActivePlayer != "CPU": #continue Here - add a selection to increment the list 
                             SelectionY_pos[i-1] = SelectionY_pos[i-1] - scrollSpeed
                             if SelectionY_pos[i-1] < 0 - spaceBetweenWords :
                                 selectionRangeList[i-1] = selectionRangeList[i-1] + endingRange 
@@ -779,11 +762,11 @@ class Game:
                         
                         #CONTINUE HERE! - Make the CPU selection process last longer and change the word selection animation 
                         elif ActivePlayer == "CPU":
-                            SelectionY_pos[i-1] = SelectionY_pos[i-1] - scrollSpeed
-                            if SelectionY_pos[i-1] < 0 - spaceBetweenWords :
-                                selectionRangeList[i-1] = selectionRangeList[i-1] + endingRange 
-                                SelectionY_pos[i-1] = Screen_Height
                             CPUdelay.zero = False
+                            boxOutline(595,380,350,35)
+                            CPUWord = random.randint(0,len(Word_List)-1)
+                            stringToText(Word_List[CPUWord], 600, 385, self.Game_Screen)
+                            #UPDATE with word selection in center screen
                             CPUdelay.draw(keys[pygame.K_RETURN])
                             print(CPUdelay.CountDown)
                             if CPUdelay.CountDown <= 10:
