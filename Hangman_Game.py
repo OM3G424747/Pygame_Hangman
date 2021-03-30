@@ -46,8 +46,7 @@ GuessList = []
 SelectionY_pos = [] #Yposition for word selection - Placed outside of gameloop to make text move
 selectionRangeList = []
 CountDownTimer = 300
-Player1Score = 0
-Player2Score = 0
+
 #TODO - create a "loading bar" for next round/ next screens 
 
 
@@ -267,6 +266,7 @@ class Game:
         ActivePlayer = "Player 1"
         Player1Score = 0
         Player2Score = 0
+        Round_Counter = 0
         #ammount of turns to take with each difficulty setting
        
         Easy = 16
@@ -304,6 +304,8 @@ class Game:
 
                 if keys[pygame.K_ESCAPE] == True:
                     Game_Over = True 
+
+                
 
 
 #TODO - update include an update on the KeyLetter variable to the keyboard letter
@@ -448,23 +450,91 @@ class Game:
 
             def scoreBoard(Xpos, Ypos, Player1GameMode, ActivePlayer, Player1Score, Player2Score):
                 #CONTINUE HERE!
+                PlayerName = ""
+                if Player1GameMode == True:
+                    PlayerName = "CPU"
+                elif Player1GameMode == False:
+                    PlayerName = "Player 2"
+
                 spacing = 25
+                    
+                if Round_Counter >= 2 or Round_Counter %2 == 0:
+                    if RandomWord == True:
+                        if Player1Score > Player2Score and Round_Counter == 2:
+                            boxOutline(20,20, 1200, 35)
+                            stringToText(f"Another correct guess from Player 1 will win the game", 25,25,self.Game_Screen)
+                        elif Player1Score > Player2Score and Round_Counter > 2:
+                            boxOutline(20,20, 1200, 35)
+                            stringToText(f"Player 1 WINS", 25,25,self.Game_Screen)
+                        elif Player1Score < Player2Score and Round_Counter == 2:
+                            boxOutline(20,20, 1200, 35)
+                            stringToText(f"Player 1 needs to win the next round to stay in the game", 25,25,self.Game_Screen)
+                        elif Player1Score < Player2Score and Round_Counter > 2:
+                            boxOutline(20,20, 1200, 35)
+                            stringToText(f"{PlayerName} WINS", 25,25,self.Game_Screen)
+
+                    elif RandomWord == False:
+                        if Player1Score < Player2Score and Round_Counter == 2:
+                            boxOutline(20,20, 1200, 35)
+                            stringToText(f"Another correct guess from {PlayerName} will win the game", 25,25,self.Game_Screen)
+                        elif Player1Score < Player2Score and Round_Counter >= 2:
+                            boxOutline(20,20, 250, 35)
+                            stringToText(f"{PlayerName} WINS", 25,25,self.Game_Screen)
+                        elif Player1Score > Player2Score and Round_Counter == 2:
+                            boxOutline(20,20, 1200, 35)
+                            stringToText(f"{PlayerName} needs to win the next round to stay in the game", 25,25,self.Game_Screen)
+                        elif Player1Score > Player2Score and Round_Counter >= 2:
+                            boxOutline(20,20, 250, 35)
+                            stringToText(f"Player 1 WINS", 25,25,self.Game_Screen)
+                                
+                elif Round_Counter >= 3 and Round_Counter %2 == 1:
+                    if RandomWord == True:
+                        if Player1Score < Player2Score and Round_Counter == 3:
+                            boxOutline(20,20, 250, 35)
+                            stringToText(f"{PlayerName} WINS", 25,25,self.Game_Screen)
+                        elif Player1Score < Player2Score and Round_Counter >3:
+                            boxOutline(20,20, 250, 35)
+                            stringToText(f"Player 1 needs to win the next round to stay in the game", 25,25,self.Game_Screen)
+                        elif Player1Score > Player2Score:
+                            boxOutline(20,20, 250, 35)
+                            stringToText(f"{PlayerName} needs to win the next round to stay in the game", 25,25,self.Game_Screen)
+                        elif Player1Score == Player2Score:
+                            boxOutline(20,20, 250, 35)
+                            stringToText(f"Another correct guess from {PlayerName} will win the game", 25,25,self.Game_Screen)
+                                
+                    elif RandomWord == False:
+                        if Player1Score > Player2Score:
+                            boxOutline(20,20, 250, 35)
+                            stringToText(f"Player 1 WINS", 25,25,self.Game_Screen)
+                        elif Player1Score < Player2Score:
+                            boxOutline(20,20, 250, 35)
+                            stringToText(f"Player 1 needs to win the next round to stay in the game", 25,25,self.Game_Screen)
+                        elif Player1Score == Player2Score:
+                            boxOutline(20,20, 1200, 35)
+                            stringToText(f"Another correct guess from Player 1 will win the game", 25,25,self.Game_Screen)
+
+                                
+
+
+
+                boxOutline(Xpos - 5,Ypos - spacing - 10, 545, 120)
+                stringToText(f"Round -{str(Round_Counter)} Complete", Xpos,Ypos - spacing -5,self.Game_Screen)
                 if ActivePlayer == "Player 1":
-                    stringToText(f"Player 1 Score - {str(Player1Score)}", Xpos,Ypos + spacing,self.Game_Screen)
+                    stringToText(f"Player 1 -Score - {str(Player1Score)}", Xpos,Ypos + spacing +5,self.Game_Screen)
                     if Player1GameMode == False:
                         stringToText("Player 2 your turn Next", Xpos,Ypos, self.Game_Screen)
-                        stringToText(f"Player 2 Score - {str(Player2Score)}", Xpos,Ypos + spacing *2,self.Game_Screen)
+                        stringToText(f"Player 2 -Score - {str(Player2Score)}", Xpos,Ypos + spacing *2 +5,self.Game_Screen)
                     elif Player1GameMode == True:
                         stringToText("CPU your turn Next", Xpos,Ypos, self.Game_Screen)
-                        stringToText(f"CPU Score - {str(Player2Score)}", Xpos,Ypos + spacing *2,self.Game_Screen)
+                        stringToText(f"CPU     -Score - {str(Player2Score)}", Xpos,Ypos + spacing *2 +10,self.Game_Screen)
                 
                 elif ActivePlayer != "Player 1":
                     stringToText("Player 1 your turn Next", Xpos,Ypos, self.Game_Screen)
-                    stringToText(f"Player 1 Score - {str(Player1Score)}", Xpos,Ypos + spacing,self.Game_Screen)
+                    stringToText(f"Player 1 -Score - {str(Player1Score)}", Xpos,Ypos + spacing +5,self.Game_Screen)
                     if Player1GameMode == False:
-                        stringToText(f"Player 2 Score - {str(Player2Score)}", Xpos,Ypos + spacing*2,self.Game_Screen)
+                        stringToText(f"Player 2 -Score - {str(Player2Score)}", Xpos,Ypos + spacing*2 +5,self.Game_Screen)
                     elif Player1GameMode == True:
-                        stringToText(f"CPU Score - {str(Player2Score)}", Xpos,Ypos + spacing*2,self.Game_Screen)
+                        stringToText(f"CPU     -Score - {str(Player2Score)}", Xpos,Ypos + spacing*2 + 10,self.Game_Screen)
 
             
         
@@ -551,8 +621,8 @@ class Game:
                     X_posList = []
                     timer.CountDown = CountDownTimer
                     Counter = 0
-                    ### CONTINUE HERE!!!!!!!!!!!!!!!!!!                     
-                    #Displayes actove player in the top center of the screen 
+                                        
+                    #Displayes active player in the top center of the screen 
                     if ActivePlayer == "Player 1" or ActivePlayer == "Player 2":
                         boxOutline(645,20, 415,35)
                         stringToText(f"Your Turn {ActivePlayer}", 650, 25, self.Game_Screen )
@@ -566,16 +636,16 @@ class Game:
                     if ActivePlayer == "CPU":
                         CPULetter = ""
                         CPUclick = False
-                        #changes keyboard variable to disable player input 
+                        #changes keyboard variable to disable player input if CPU is playing
                         keyboard = keyselection(onScreenKeyBoard, GuessList, self.Game_Screen, 450, 0, 0, CPUclick, CPULetter)
                         CPUskill = 4 #Higher number results in a harder opponent 
                         if Difficulty == Easy:
-                            CPUskill = 25 
+                            CPUskill = 25 #results in the CPU having a 2 in 25 chance of guessing correctly 
                         elif Difficulty == Medium:
-                            CPUskill = 50
+                            CPUskill = 50 #results in the CPU having a %50 chance of guessing correctly 
                         elif Difficulty == Hard:
-                            CPUskill = 75
-                        CPUguess = random.randint(1,CPUskill)
+                            CPUskill = 75 #results in the CPU having 2 to 1 chance of guessing correctly 
+                        CPUguess = random.randint(1,CPUskill) 
                         
                         CPUdelay.draw(keys[pygame.K_RETURN])
                         if CPUdelay.CountDown <= 10:
@@ -583,7 +653,7 @@ class Game:
                         elif CPUdelay.CountDown >= 10:
                             CPUdelay.zero = False
 
-                        if CPUguess >= 25 and CPUdelay.zero == True: 
+                        if CPUguess >= 24 and CPUdelay.zero == True: 
                             letterToSelect = random.randint(0, len(Word)-1)
                             print(Word[letterToSelect].capitalize())
                             if Word[letterToSelect].capitalize() not in GuessList:
@@ -593,7 +663,7 @@ class Game:
                             else:
                                 letterToSelect = random.randint(0, len(Word)-1)
                                 
-                        elif CPUguess <= 25 and CPUdelay.zero == True: 
+                        elif CPUguess < 24 and CPUdelay.zero == True: 
                             CPUguess = random.randint(1,len(onScreenKeyBoard)-1)
                             letterToSelect = random.randint(0, len(onScreenKeyBoard)-1)
                             print(onScreenKeyBoard[letterToSelect].capitalize())
@@ -616,14 +686,17 @@ class Game:
                     
                     #Conditions check if the game is won
                     if guessCheck(GuessList , Word) >= Difficulty:
+                        Round_Counter = Round_Counter + 1
                         PlayerWin = False
                         Round_Over = True
                     elif winCheck(GuessList, Word) == True:
                         if ActivePlayer == "Player 1":
+                            Round_Counter = Round_Counter + 1
                             Player1Score = Player1Score + 1
                             PlayerWin = True
                             Round_Over = True 
                         elif ActivePlayer == "Player 2" or ActivePlayer == "CPU":
+                            Round_Counter = Round_Counter + 1
                             Player2Score = Player2Score + 1
                             PlayerWin = True
                             Round_Over = True    
