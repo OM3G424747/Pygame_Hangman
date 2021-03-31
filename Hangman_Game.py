@@ -19,6 +19,7 @@ Screen_Title = "Hangman Game" #Sets name on gamewindow
 White_Colour = (255,255,255) #colours set according to RGB - R 255 G 255  B 255
 Black_Colour = (0,0,0)
 Red_Colour = (255,0,0)
+lightRed_Colour = (200,100,100)
 Green_Colour = (0,255,0)
 Blue_Colour = (0,0,255)
 Grey_Colour = (100,100,100)
@@ -274,15 +275,14 @@ class Game:
         Hard = 8
         Difficulty = Medium #Defaults to medium 
 
-
  
         title = GameObject("assets/Menu/Title.png", 650,100,896,110) 
         onePlayer = GameObject("assets/Menu/singlePlayer.png", 1225,400,233,34)
         twoPlayer = GameObject("assets/Menu/2Player.png", 1225,475,241,34)
         selectWord = GameObject("assets/Menu/selectWord.png", 1115,400,367,36)
         randomWord = GameObject("assets/Menu/randomWord.png", 1115,475,442,36)
-        timer = delay(CountDownTimer, self.Game_Screen)
-        CPUdelay = delay(CountDownTimer, self.Game_Screen)
+        timer = delay(500, self.Game_Screen)
+        CPUdelay = delay(300, self.Game_Screen)
         CPUdelay.CountDown = 100
         CPUdelay.TimerY_pos = 100
         CPUdelay.CPU = True
@@ -387,6 +387,7 @@ class Game:
                 if score == len(Word):
                     return True
 
+##TODO - Include Blit funtion for Hangman PNG HERE - CONTINUE HERE!
             def guessRemaining(Number, Difficulty):
                 DisplayX_pos = 100
                 DisplayY_pos = 100
@@ -450,71 +451,50 @@ class Game:
 
             def scoreBoard(Xpos, Ypos, Player1GameMode, ActivePlayer, Player1Score, Player2Score):
                 #CONTINUE HERE!
-                PlayerName = ""
-                if Player1GameMode == True:
-                    PlayerName = "CPU"
-                elif Player1GameMode == False:
-                    PlayerName = "Player 2"
-
+                EnemyName = turnChange(OnePlayerGame, "Player 1")
+            
                 spacing = 25
-                    
-                if Round_Counter >= 2 or Round_Counter %2 == 0:
-                    if RandomWord == True:
-                        if Player1Score > Player2Score and Round_Counter == 2:
-                            boxOutline(20,20, 1200, 35)
-                            stringToText(f"Another correct guess from Player 1 will win the game", 25,25,self.Game_Screen)
-                        elif Player1Score > Player2Score and Round_Counter > 2:
-                            boxOutline(20,20, 1200, 35)
-                            stringToText(f"Player 1 WINS", 25,25,self.Game_Screen)
-                        elif Player1Score < Player2Score and Round_Counter == 2:
-                            boxOutline(20,20, 1200, 35)
-                            stringToText(f"Player 1 needs to win the next round to stay in the game", 25,25,self.Game_Screen)
-                        elif Player1Score < Player2Score and Round_Counter > 2:
-                            boxOutline(20,20, 1200, 35)
-                            stringToText(f"{PlayerName} WINS", 25,25,self.Game_Screen)
+                    #CONTINUE HERE - CALCULATE A WINNER 
+                if Round_Counter == 1:
+                    if Player1Score == Player2Score:
+                        boxOutline(20,20, 1400, 35)
+                        stringToText(f"best out of 3 - {turnChange(OnePlayerGame, ActivePlayer)} needs to win the next round to not Tie", 25,25,self.Game_Screen)
+                    elif Player1Score != Player2Score:
+                        boxOutline(20,20, 1210, 35)
+                        stringToText(f"best out of 3 - {turnChange(OnePlayerGame, ActivePlayer)} needs to win the next round", 25,25,self.Game_Screen)
 
-                    elif RandomWord == False:
-                        if Player1Score < Player2Score and Round_Counter == 2:
-                            boxOutline(20,20, 1200, 35)
-                            stringToText(f"Another correct guess from {PlayerName} will win the game", 25,25,self.Game_Screen)
-                        elif Player1Score < Player2Score and Round_Counter >= 2:
-                            boxOutline(20,20, 250, 35)
-                            stringToText(f"{PlayerName} WINS", 25,25,self.Game_Screen)
-                        elif Player1Score > Player2Score and Round_Counter == 2:
-                            boxOutline(20,20, 1200, 35)
-                            stringToText(f"{PlayerName} needs to win the next round to stay in the game", 25,25,self.Game_Screen)
-                        elif Player1Score > Player2Score and Round_Counter >= 2:
-                            boxOutline(20,20, 250, 35)
-                            stringToText(f"Player 1 WINS", 25,25,self.Game_Screen)
-                                
-                elif Round_Counter >= 3 and Round_Counter %2 == 1:
-                    if RandomWord == True:
-                        if Player1Score < Player2Score and Round_Counter == 3:
-                            boxOutline(20,20, 250, 35)
-                            stringToText(f"{PlayerName} WINS", 25,25,self.Game_Screen)
-                        elif Player1Score < Player2Score and Round_Counter >3:
-                            boxOutline(20,20, 250, 35)
-                            stringToText(f"Player 1 needs to win the next round to stay in the game", 25,25,self.Game_Screen)
-                        elif Player1Score > Player2Score:
-                            boxOutline(20,20, 250, 35)
-                            stringToText(f"{PlayerName} needs to win the next round to stay in the game", 25,25,self.Game_Screen)
-                        elif Player1Score == Player2Score:
-                            boxOutline(20,20, 250, 35)
-                            stringToText(f"Another correct guess from {PlayerName} will win the game", 25,25,self.Game_Screen)
-                                
-                    elif RandomWord == False:
-                        if Player1Score > Player2Score:
-                            boxOutline(20,20, 250, 35)
-                            stringToText(f"Player 1 WINS", 25,25,self.Game_Screen)
-                        elif Player1Score < Player2Score:
-                            boxOutline(20,20, 250, 35)
-                            stringToText(f"Player 1 needs to win the next round to stay in the game", 25,25,self.Game_Screen)
-                        elif Player1Score == Player2Score:
-                            boxOutline(20,20, 1200, 35)
-                            stringToText(f"Another correct guess from Player 1 will win the game", 25,25,self.Game_Screen)
+                elif Round_Counter %2 == 0: 
+                    if Player1Score == Player2Score and Round_Counter > 2:
+                        boxOutline(20,20, 1000, 35)
+                        stringToText(f"Its a Tie - best out of {str(Round_Counter + 1)} to win the game", 25,25,self.Game_Screen)
+                    elif Player1Score > Player2Score and Round_Counter > 2:
+                        boxOutline(20,20, 300, 35)
+                        stringToText(f"Player 1 WINS", 25,25,self.Game_Screen)
+                        return "WIN"
+                    elif Player1Score < Player2Score and Round_Counter > 2:
+                        boxOutline(20,20, 300, 35)
+                        stringToText(f"{EnemyName} WINS", 25,25,self.Game_Screen)
+                        return "WIN"
 
-                                
-
+                elif Round_Counter %2 == 1:
+                    if Player1Score > Player2Score and Round_Counter > 2 and Player1Score != 0 and Player2Score != 0:
+                        boxOutline(20,20, 1350, 35)
+                        stringToText(f"{EnemyName} needs to win the next round to stay in the game", 25,25,self.Game_Screen)
+                    elif Player1Score < Player2Score and Round_Counter > 2 and Player1Score != 0 and Player2Score != 0:
+                        boxOutline(20,20, 1350, 35)
+                        stringToText("Player 1 needs to win the next round to stay in the game", 25,25,self.Game_Screen)
+                    elif Player1Score == Player2Score and Round_Counter > 2:
+                        boxOutline(20,20, 1200, 35)
+                        stringToText(f"If {turnChange(OnePlayerGame, ActivePlayer)} wins the next round they win the game", 25,25,self.Game_Screen)
+                    elif Player1Score != Player2Score:
+                        if Player1Score == 0:
+                            boxOutline(20,20, 300, 35)
+                            stringToText(f"{EnemyName} WINS", 25,25,self.Game_Screen)
+                            return "WIN"
+                        elif Player2Score == 0:
+                            boxOutline(20,20, 300, 35)
+                            stringToText(f"Player 1 WINS", 25,25,self.Game_Screen)
+                            return "WIN"
 
 
                 boxOutline(Xpos - 5,Ypos - spacing - 10, 545, 120)
@@ -537,8 +517,8 @@ class Game:
                         stringToText(f"CPU     -Score - {str(Player2Score)}", Xpos,Ypos + spacing*2 + 10,self.Game_Screen)
 
             
-        
-            #ToDo - possibly add option for AI difficulty to increase     
+
+# MAIN GAME MENU ---------------------------------------------------------------------------------------    
             if GameMenu == True and OnePlayerGame == False and TwoPlayerGame == False:
                 self.Game_Screen.fill(LightGrey_Colour)
                 outline.Draw(self.Game_Screen)
@@ -567,12 +547,22 @@ class Game:
                     print(mousePos)
                     print("You clicked on One Player Mode")
                     if click == True:
+                        Game_On = False
+                        Round_Over = False
+                        RandomWord = False
+                        ChooseWord = False
+                        TwoPlayerGame = False
                         OnePlayerGame = True
                         click = False
                 elif mousePos[0] >= twoPlayer.X_pos and mousePos[1] >= twoPlayer.Y_pos and mousePos[0] <= twoPlayer.X_pos + 241 and mousePos[1] <=  twoPlayer.Y_pos + 34:
                     print(mousePos)
                     print("You clicked on Two Player Mode")
                     if click == True:
+                        Game_On = False
+                        Round_Over = False
+                        RandomWord = False
+                        ChooseWord = False
+                        OnePlayerGame = False
                         TwoPlayerGame = True
                         click = False
                 elif mousePos[0] >= 650 and mousePos[1] >= 465 and mousePos[0] <= 650 + 500 and mousePos[1] <=  464 + 35:
@@ -601,10 +591,16 @@ class Game:
                 randomWord.Draw(self.Game_Screen)
                 if mousePos[0] >= selectWord.X_pos and mousePos[1] >= selectWord.Y_pos and mousePos[0] <= selectWord.X_pos + 367 and mousePos[1] <=  selectWord.Y_pos + 36:
                     if click == True:
+                        Player1Score = 0
+                        Player2Score = 0
+                        Round_Counter = 0
                         ChooseWord = True
                         click = False
                 elif mousePos[0] >= randomWord.X_pos and mousePos[1] >= randomWord.Y_pos and mousePos[0] <= randomWord.X_pos + 442 and mousePos[1] <=  randomWord.Y_pos + 36:
                     if click == True:
+                        Player1Score = 0
+                        Player2Score = 0
+                        Round_Counter = 0
                         RandomWord = True
                         click = False
                         
@@ -728,43 +724,67 @@ class Game:
 #PostRound - Scoreboard -----------------------------------------------------------------------------------------------------------------------------------------------                
                 #display when the round is over and max number of tries have been reached 
                 elif GameMenu == True and Round_Over == True: 
-                    self.Game_Screen.fill(LightGrey_Colour)
                     
                     if PlayerWin == True: 
-
+                        self.Game_Screen.fill(LightGrey_Colour)
                         winOutline.Draw(self.Game_Screen) #Blits an image of an empty gallows
                         boxOutline(595, 395, 245, 85)
                         stringToText("Round Won", 600, 400, self.Game_Screen )
                         boxOutline(595, 440, len(f"{ActivePlayer} -You Win -{Word} is correct") *21 -20, 40)
                         stringToText(f"{ActivePlayer} Wins -{Word} is correct", 600, 450, self.Game_Screen ) 
                     elif PlayerWin == False:
+                        self.Game_Screen.fill(lightRed_Colour)
                         outline.Draw(self.Game_Screen) #Blits an image of an empty gallows
                         boxOutline(595, 395, 245, 85)
                         stringToText("Round Lost", 600, 400, self.Game_Screen )
                         boxOutline(595, 440, len(f"{ActivePlayer} -You Win -{Word} is correct") *22 +5, 40)
                         stringToText(f"{ActivePlayer} Loses -{Word} was correct", 600, 450, self.Game_Screen )
                         
-                    scoreBoard(900, 100, OnePlayerGame, ActivePlayer, Player1Score, Player2Score)
-                    timer.draw(keys[pygame.K_RETURN])
-                    if timer.CountDown <= 10:
-                        print("YAY!")
-                        timer.zero = True
+                    
+                    
+                    if scoreBoard(900, 100, OnePlayerGame, ActivePlayer, Player1Score, Player2Score) == "WIN":
+                        boxOutline(900 - 5,100 - 25 - 10, 545, 120)
+                        GuessList.clear()
+                        stringToText(f"Rounds -{str(Round_Counter)} Completed", 900,100 - 25 -5,self.Game_Screen)
+                        stringToText(f"Player 1 -Score - {str(Player1Score)}", 900,100 + 25 +5,self.Game_Screen)
+                        if OnePlayerGame == False:
+                            stringToText(f"Player 2 -Score - {str(Player2Score)}", 900,100 + 25*2 +5,self.Game_Screen)
+                        elif OnePlayerGame == True:
+                            stringToText(f"CPU     -Score - {str(Player2Score)}", 900,100 + 25*2 + 10,self.Game_Screen)
+
+                        boxOutline(595, 695, 800, 35)
+                        stringToText("Press Enter to return to main menu", 600, 700, self.Game_Screen )
+                        if keys[pygame.K_RETURN] == True: 
+                            ActivePlayer = "Player 1"
+                            Word = ""
+                            if OnePlayerGame == True:
+                                OnePlayerGame = False
+                            elif TwoPlayerGame == True:
+                                TwoPlayerGame = False
+
+                    else:
+                        timer.draw(keys[pygame.K_RETURN])
+                        if timer.CountDown <= 10:
+                            print("YAY!")
+                            timer.zero = True
+                    
+                            if timer.zero == True:
+                                print("Condition MET")
+                                ActivePlayer = turnChange(OnePlayerGame, ActivePlayer)
+                                #update to display the next player 
+                                print(ActivePlayer)
+                                GuessList.clear()
+                                if ChooseWord == True:
+                                    CPUdelay.CountDown = 500
+                                    ActivePlayer = turnChange(OnePlayerGame, ActivePlayer) #changes active player back again so the last player gets a turn to choose a word
+                                elif RandomWord == True:
+                                    numSelect = random.randint(0,len(Word_List))
+                                    Word = Word_List[numSelect]
+                                    CPUdelay.CountDown = 300
                 
-                        if timer.zero == True:
-                            print("Condition MET")
-                            ActivePlayer = turnChange(OnePlayerGame, ActivePlayer)
-                            #update to display the next player 
-                            print(ActivePlayer)
-                            GuessList.clear()
-                            if ChooseWord == True:
-                                ActivePlayer = turnChange(OnePlayerGame, ActivePlayer) #changes active player back again so the last player gets a turn to choose a word
-                            elif RandomWord == True:
-                                numSelect = random.randint(0,len(Word_List))
-                                Word = Word_List[numSelect]
-                            CPUdelay.CountDown = 500
-                            Game_On = False
-                            Round_Over = False
-                            print(Round_Over)
+                                Game_On = False
+                                Round_Over = False
+                                print(Round_Over)
 
                         
 #WORDSELCTION SCREEN ---------------------------------------------------------------------------------------                
@@ -786,6 +806,11 @@ class Game:
                         boxOutline(20, 95, 615, 85)
                         stringToText("Use the up and down keys", 25, 100, self.Game_Screen)
                         stringToText("to scroll throught the list", 25, 150, self.Game_Screen)
+
+                        boxOutline(20, 195, 615, 85)
+                        stringToText(f"{ActivePlayer} select your word", 25, 200, self.Game_Screen)
+                        stringToText(f"{turnChange(OnePlayerGame, ActivePlayer)} Please look away", 25, 250, self.Game_Screen)
+
                     elif ActivePlayer == "CPU":
                         boxOutline(20, 95, 615, 35)
                         stringToText("CPU is selecting a word", 25, 100, self.Game_Screen)
@@ -819,14 +844,14 @@ class Game:
                             if ActivePlayer == "Player 1" or ActivePlayer == "Player 2": 
                                 stringToText(Word_List[selectionRangeList[i-1]], startingX_pos - wordSpace /2, SelectionY_pos[i-1], self.Game_Screen)
 
-                        if keys[pygame.K_DOWN] == True and ActivePlayer != "CPU":
+                        if keys[pygame.K_UP] == True and ActivePlayer != "CPU":
                             #use list of numbers to blit a different word onto the screan, and increase those numbers as the screen scrolls down 
                             SelectionY_pos[i-1] = SelectionY_pos[i-1] + scrollSpeed
                             if SelectionY_pos[i-1] >= Screen_Height + spaceBetweenWords :
                                 selectionRangeList[i-1] = selectionRangeList[i-1] - endingRange 
                                 SelectionY_pos[i-1] = 0 - spaceBetweenWords
 
-                        elif keys[pygame.K_UP] == True and ActivePlayer != "CPU": #continue Here - add a selection to increment the list 
+                        elif keys[pygame.K_DOWN] == True and ActivePlayer != "CPU": #continue Here - add a selection to increment the list 
                             SelectionY_pos[i-1] = SelectionY_pos[i-1] - scrollSpeed
                             if SelectionY_pos[i-1] < 0 - spaceBetweenWords :
                                 selectionRangeList[i-1] = selectionRangeList[i-1] + endingRange 
@@ -880,171 +905,3 @@ quit()
 
 
 
-#TEXT ACRHIVE!!!!
-#DELETE IF NOT NEEDED!!!
-
-"""         
-        A = GameObject("assets/A.png", 100,100,26,21)
-        B = GameObject("assets/B.png", 100,100,20,21)
-        C = GameObject("assets/C.png", 100,100,22,21)
-        D = GameObject("assets/D.png", 100,100,26,21)
-        E = GameObject("assets/E.png", 100,100,17,21)
-        F = GameObject("assets/F.png", 100,100,17,21)
-        G = GameObject("assets/G.png", 100,100,24,22)
-        H = GameObject("assets/H.png", 100,100,28,21)
-        I = GameObject("assets/I.png", 100,100,13,21)
-        J = GameObject("assets/J.png", 100,100,16,21)
-        K = GameObject("assets/K.png", 100,100,25,21)
-        L = GameObject("assets/L.png", 100,100,19,21)
-        M = GameObject("assets/M.png", 100,100,33,21)
-        N = GameObject("assets/N.png", 100,100,28,21)
-        O = GameObject("assets/O.png", 100,100,25,21)
-        P = GameObject("assets/P.png", 100,100,19,21)
-        Q = GameObject("assets/Q.png", 100,100,27,21)
-        R = GameObject("assets/R.png", 100,100,24,21)
-        S = GameObject("assets/S.png", 100,100,14,21)
-        T = GameObject("assets/T.png", 100,100,22,22)
-        U = GameObject("assets/U.png", 100,100,25,21)
-        V = GameObject("assets/V.png", 100,100,25,21)
-        W = GameObject("assets/W.png", 100,100,34,21)
-        X = GameObject("assets/X.png", 100,100,28,21)
-        Y = GameObject("assets/Y.png", 100,100,25,21)
-        Z = GameObject("assets/Z.png", 100,100,20,22)
-            
-            
-            def displayLetter( Letter ):
-                if Letter.capitalize() == "A":
-                    A.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "B":
-                    B.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "C":
-                    C.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "D":
-                    D.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "E":
-                    E.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "F":
-                    F.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "G":
-                    G.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "H":
-                    H.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "I":
-                    I.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "J":
-                    J.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "K":
-                    K.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "L":
-                    L.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "M":
-                    M.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "N":
-                    N.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "O":
-                    O.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "P":
-                    P.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "Q":
-                    Q.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "R":
-                    R.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "S":
-                    S.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "T":
-                    T.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "U":
-                    U.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "V":
-                    V.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "W":
-                    W.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "X":
-                    X.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "Y":
-                    Y.Draw(self.Game_Screen)
-                elif Letter.capitalize() == "Z":
-                    Z.Draw(self.Game_Screen)
-                
-           
-            def changeLetterPos(Letter, newX_pos, newY_pos ):
-                
-                if Letter.capitalize() == "A":
-                    A.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    A.Y_pos = newY_pos
-                elif Letter.capitalize() == "B":
-                    B.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    B.Y_pos = newY_pos
-                elif Letter.capitalize() == "C":
-                    C.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    C.Y_pos = newY_pos
-                elif Letter.capitalize() == "D":
-                    D.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    D.Y_pos = newY_pos
-                elif Letter.capitalize() == "E":
-                    E.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    E.Y_pos = newY_pos
-                elif Letter.capitalize() == "F":
-                    F.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    F.Y_pos = newY_pos
-                elif Letter.capitalize() == "G":
-                    G.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    G.Y_pos = newY_pos
-                elif Letter.capitalize() == "H":
-                    H.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    H.Y_pos = newY_pos
-                elif Letter.capitalize() == "I":
-                    I.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    I.Y_pos = newY_pos
-                elif Letter.capitalize() == "J":
-                    J.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    J.Y_pos = newY_pos
-                elif Letter.capitalize() == "K":
-                    K.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    K.Y_pos = newY_pos
-                elif Letter.capitalize() == "L":
-                    L.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    L.Y_pos = newY_pos
-                elif Letter.capitalize() == "M":
-                    M.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    M.Y_pos = newY_pos
-                elif Letter.capitalize() == "N":
-                    N.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    N.Y_pos = newY_pos
-                elif Letter.capitalize() == "O":
-                    O.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    O.Y_pos = newY_pos
-                elif Letter.capitalize() == "P":
-                    P.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    P.Y_pos = newY_pos
-                elif Letter.capitalize() == "Q":
-                    Q.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    Q.Y_pos = newY_pos
-                elif Letter.capitalize() == "R":
-                    R.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    R.Y_pos = newY_pos
-                elif Letter.capitalize() == "S":
-                    S.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    S.Y_pos = newY_pos
-                elif Letter.capitalize() == "T":
-                    T.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    T.Y_pos = newY_pos
-                elif Letter.capitalize() == "U":
-                    U.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    U.Y_pos = newY_pos
-                elif Letter.capitalize() == "V":
-                    V.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    V.Y_pos = newY_pos
-                elif Letter.capitalize() == "W":
-                    W.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    W.Y_pos = newY_pos
-                elif Letter.capitalize() == "X":
-                    X.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    X.Y_pos = newY_pos
-                elif Letter.capitalize() == "Y":
-                    Y.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    Y.Y_pos = newY_pos
-                elif Letter.capitalize() == "Z":
-                    Z.X_pos = newX_pos + textCentering[Letter.capitalize()]
-                    Z.Y_pos = newY_pos
-"""
