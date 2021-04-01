@@ -391,6 +391,28 @@ class Game:
             def guessRemaining(Number, Difficulty):
                 DisplayX_pos = 100
                 DisplayY_pos = 100
+                
+                MediumTurn = 0
+                if Number <= 2:
+                    MediumTurn = Number *2
+                elif Number > 2:
+                    MediumTurn = 4
+
+                if Difficulty == Easy:
+                    Count = 16 - Number
+                elif Difficulty == Medium:
+                    if Number <= 2:
+                        Count = 16 - MediumTurn
+                    elif Number > 2:
+                        Count = 16 - MediumTurn - Number
+
+                elif Difficulty == Hard:
+                    Count = 16 - Number*2
+
+                
+                print (Count)
+                TurnSprite = GameObject(f"assets/turns/Hangman_{Count}.png", 125,200,222,386)
+                TurnSprite.Draw(self.Game_Screen)
                 totalLeft = Difficulty - Number
                 if totalLeft == 16:
                     boxOutline(DisplayX_pos-5, DisplayY_pos-5, len("16 - guess remains")*23, 35)
